@@ -47,7 +47,7 @@ while True:
 
             nombre1,nombre2 = nombres.split()
 
-            apellidos = input(f"Ingrese su apellido: ")
+            apellidos = input(f"Ingrese sus apellidos: ")
 
             apellido1,apellido2 = apellidos.split()
 
@@ -81,7 +81,7 @@ while True:
             print(f"Numero de DNI: {numero_dni} ")
             print(f"Como se entero de nosotros?: {marketing}")
 
-            confirmacion = input(f"Toda su informacion esta correcta?: ")
+            confirmacion = input(f"Toda su informacion esta correcta(escriba si/no?: ")
 
 #Rectificacion de datos
 
@@ -91,7 +91,53 @@ while True:
 
                contraseña = input(f"Crea tu contraseña: ")
 
+               print(f"En caso olvide su contraseña, habilite una pregunta de seguridad!")
 
+               pregunta_seguridad = input(f"Cual es su fecha de cumpleaños?: ")
+
+               print(f"Cuenta creada con exito, bienvenid@ {usuario}!")
+
+            else confirmacion.lower() == "no":
+
+               while True:
+                  
+                   print(f"Nombres: {nombre1} {nombre2}")
+                   print(f"Apellidos: {apellido1} {apellido2}")
+                   print(f"Edad: {edad}")
+                   print(f"Departamento: {departamento}")
+                   print(f"Provincia: {provincia}")
+                   print(f"Distrito: {distrito}")
+                   print(f"direccion: {direccion} {numero_domicilio}")
+                   print(f"Numero de DNI: {numero_dni} ")
+                   print(f"Como se entero de nosotros?: {marketing}")
+
+                   dato = input(f"Que dato/s desea modificar?: ")
+
+                   if dato.lower() == "Nombres":
+
+                      nombres = input(f"Ingrese nuevamente sus nombres: ")
+
+                      nombre1,nombre2 = nombres.split()
+
+                   elif dato.lower() == "Apellidos":
+
+                      apellidos = input(f"Ingrese nuevamente sus apellidos: ")
+
+                      apellido1,apellido2 = apellidos.split()
+
+                   elif dato.lower() == "Edad":
+
+                       
+
+                       
+
+                      
+
+                    
+
+                
+
+                 
 
 
 
