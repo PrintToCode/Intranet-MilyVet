@@ -241,7 +241,14 @@ while True:
     limpiar_pantalla()
     
     #Se muestra el menú inicial
-    print("====MENU INICIAL====")
+    print(r"""
+  /\_/\        __  ____ ___ _    __     __       / \__ 
+ ( o.o )      /  |/  (_) (_) |  / /__  / /_     (    @\_
+  > ^ <      / /|_/ / / / /| | / / _ \/ __/     /       O
+            / /  / / / / / | |/ /  __/ /_      /   (____/
+           /_/  /_/_/_/_/  |___/\___/\__/      /___/  U  
+""")
+    print("====MENU INICIAL - MilyVet====")
     print("1. Iniciar Sesion")
     print("2. Nuevo Usuario")
     print("3. Recuperar Contraseña")
