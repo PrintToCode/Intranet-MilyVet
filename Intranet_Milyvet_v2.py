@@ -1,4 +1,4 @@
-#Módulo Cambio de Contraseña - Luis Alberca
+#MilivetV2
 
 #Importar módulo os para crear la función "limpiar_pantalla"
 import os
@@ -78,8 +78,31 @@ def validar_contrasena(contrasena):
     # Si no se presentan errores de validación en la contraseña, entonces el valor de la variable contrasena_valida es true, de lo contrario es false
     contrasena_valida = len(errores) == 0
 
-    # Se retorna la tupla contrasena_valida, errores
-    return contrasena_valida, errores
+    # Si la contraseña cumple con la complejidad
+    if contrasena_valida == True:
+        # Se imprime el mensaje de éxito correspondiente
+        print("\nContraseña válida ✅")
+        # Se retorna el string "valida"
+        return "valida"
+    # Si la contraseña NO cumple con la complejidad
+    else:
+        # Se imprime el mensaje de error correspondiente
+        print("\nContraseña inválida ❌. Errores encontarados:\n")
+        # Se listan los errores encontrados en la complejidad de la contraseña
+        for error in errores:
+            print(f"- {error}")
+        
+        # Se solicita al usuario que presione la tecla "Enter" para volver a intentarlo ó "X" para retornar al menú inicial
+        opcion = input("\nPresione Enter para volver a interntarlo ó \"X\" para volver al menú inicial...\n ")
+
+    # Si el usuario presiona la tecla "X"
+    if opcion.lower() == "x":
+        # Se retorna el string "inicial"
+        return "inicial"
+    else:
+        # Caso contrario, se retorna el string "reintentar"
+        return "reintentar"
+
 ########################
 
 ####FUNCION NUEVO USUARIO####
@@ -88,6 +111,14 @@ def nuevo_usuario():
     # Se solicita al usuario ingresar su correo
     correo = input("Ingresar correo: ")
 
+    # Se verifica si el correo ingresado ya se encuentra registrado
+    for user in tabla_usuarios:
+        # Si el correo ingresado por el usuario ya se encuentra registrado, entonces se retorna al menú inicial
+        if (user.correo).lower() == correo.lower():
+            print("\nEl correo ingresado ya se encuentra registrado ❌\n")
+            input("Presione Enter para continuar...")
+            return
+
     # La validación de la contraseña se realiza mediante un bucle while
     while True:
 
@@ -95,29 +126,17 @@ def nuevo_usuario():
         contrasena = getpass.getpass("Ingresar contraseña: ")
 
         # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
-        # la tupla de salida se almacena en las variables valida y lista_errores
-        valida, lista_errores = validar_contrasena(contrasena)
+        valida = validar_contrasena(contrasena)
 
-        # Si la contraseña cumple con la complejidad
-        if valida == True:
-            # Se imprime el mensaje de éxito correspondiente
-            print("Contraseña válida ✅\n")
-            # Se sale del while
+        # Si la función retorna el string "valida", se sale del while
+        if valida == "valida":
             break
-        # Si la contraseña NO cumple con la complejidad
-        else:
-            # Se imprime el mensaje de error correspondiente
-            print("Contraseña inválida ❌. Errores encontarados:\n")
-            # Se listan los errores encontrados en la complejidad de la contraseña
-            for error in lista_errores:
-                print(f"- {error}")
-            
-            # Se solicita al usuario que presione la tecla "Enter" para volver a intentarlo ó "X" para retornar al menú principal
-            opcion = input("\nPresione Enter para volver a interntarlo ó \"X\" para volver al menú principal...\n ")
-
-        # Si el usuario presiona la tecla "X", se regreda al menú principal
-        if opcion.lower() == "x":
+        # Caso contrario, si la función retorna el string "inicial", se vuelve al menú inicial
+        elif(valida == "inicial"):
             return
+        #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
+        else:
+            limpiar_pantalla()
 
     # Se define un arreglo para ingresar las tuplas: pregunta, respuesta del usuario
     preguntas_respuestas = []
@@ -125,7 +144,7 @@ def nuevo_usuario():
     # Se utiliza un for para que el usuario pueda ingresar las 3 tuplas de pregunta, respuesta
     for i in range(3):
         # Se solicita al usuario que ingrese una pregunta de seguridad
-        pregunta = input(f"Escriba pregunta de seguridad {i + 1}: ")
+        pregunta = input(f"\nEscriba pregunta de seguridad {i + 1}: ")
         # Se solicita al usuario que ingrese una respuesta de seguridad
         respuesta = getpass.getpass(f"Escriba respuesta de seguridad {i + 1}: ")
         # Se agrega la tupla pregunta, respuesta ingresada por el usuario a al arreglo preguntas_respuestas
@@ -142,7 +161,7 @@ def nuevo_usuario():
     tabla_usuarios.append(usuario_nuevo)
 
     # Se imprime mensaje de confirmación
-    print("\n¡Usuario creado de manera exitosa!\n")
+    print("\n¡Usuario creado de manera exitosa! ✅")
 
     # Se espera que el usuario presione enter para continuar
     input("\nPresione Enter para continuar...")
@@ -155,45 +174,74 @@ def recuperar_contrasena():
 
     #Se busca el correo ingresado en la "tabla_usuarios"
     for user in tabla_usuarios:
+        # Si se encuentra el usuario
         if user.correo == correo_ingresado:
 
-            print("\nUsuario encontrado\n")
+            print("\n¡Usuario encontrado!✅ Responda las siguientes preguntas de seguridad: \n")
             
+            # Se solicita al usuario contestar de manera correcta las 3 preguntas de seguridad
             for pregunta, respuesta in user.preguntas_respuestas:
-                respuesta_usuario = input(f"{pregunta}\n")
+                respuesta_usuario = getpass.getpass(f"{pregunta}\n")
+                # Si contesta de manera errónea alguna pregunta de seguridad
                 if respuesta_usuario != respuesta:
-                    print("Respuesta Incorreta\n")
+                    print("Respuesta Incorreta ❌\n")
                     input("Presione Enter para continuar...")
+                    # Se retorna al menú inicial
                     return
+                # Si el usuario contesta de manera correcta las 3 preguntas de seguridad, entonces se le solicita una nueva contraseña
+                else:
+                    print("Respuesta Correcta ✅\n")
             
-            print("\nHa contestado de manera correcta todas las preguntas\n")
+            print("Ha contestado de manera correcta todas las preguntas ✅\n")
 
-            password_nueva = input("Ingrese una contraseña nueva: ")
+            # La validación de la contraseña se realiza mediante un bucle while
+            while True:
 
+                # Se solicita al usuario ingresar una contraseña nueva
+                password_nueva = getpass.getpass("Ingrese una contraseña nueva: ")
+
+                # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
+                valida = validar_contrasena(password_nueva)
+
+                # Si la función retorna el string "valida", se sale del while
+                if valida == "valida":
+                    break
+                # Caso contrario, si la función retorna el string "inicial", se vuelve al menú inicial
+                elif(valida == "inicial"):
+                    return
+                #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
+                else:
+                    limpiar_pantalla()
+
+            # Se actualiza la contraseña del usuario
             user.contrasena = password_nueva
 
-            print(f"\n¡Contraseña actualizada!")
+            # Se imprime mensaje de éxito
+            print(f"\n¡Contraseña actualizada! ✅")
 
+            # Se solicita al usuario presionar "Enter" para continuar
             input("\nPresione Enter para continuar...")
 
-
+            # Se retorna al menú inicial
             return
 
-        else:
-            print("No se encontró el usuario\n")
-            input("Presione Enter para continuar...")
+    # Si no se encuentra al usuario en el arreglo "tabla_usuarios"
+    print("\nNo se encontró el usuario ❌\n")
+
+    # Se imprime el mensaje de error correspondiente
+    input("Presione Enter para continuar...")
 ####################################
 
 #################
 
-#Menu Principal
+#Menu Inicial
 while True:
 
     #Se limpia la pantalla
     limpiar_pantalla()
     
-    #Se muestra el menú principal
-    print("====MENU PRINCIPAL====")
+    #Se muestra el menú inicial
+    print("====MENU INICIAL====")
     print("1. Iniciar Sesion")
     print("2. Nuevo Usuario")
     print("3. Recuperar Contraseña")
@@ -202,7 +250,7 @@ while True:
     #Se pide al usuario que ingrese una opción
     main_option = int(input("Ingrese una opción: "))
 
-    #Se evalúa la opción ingresada en el menú principal
+    #Se evalúa la opción ingresada en el menú inicial
     match main_option:
 
         #INICIAR SESION
@@ -224,6 +272,7 @@ while True:
         case 3:
             #Se limpia la pantalla
             limpiar_pantalla()
+
             #Se ejecuta función recuperar_contrasena
             recuperar_contrasena()
 
