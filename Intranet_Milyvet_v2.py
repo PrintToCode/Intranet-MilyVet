@@ -103,7 +103,164 @@ def validar_contrasena(contrasena):
         # Caso contrario, se retorna el string "reintentar"
         return "reintentar"
 
-########################
+##############################
+
+####FUNCION MENU DEL SISTEMA####
+def menu_sistema(correo_usuario):
+
+    while True:
+
+        # Se limpia la pantalla
+        limpiar_pantalla()
+
+        # Se muestra el Menú del Sistema
+        print("====MENU DEL SISTEMA - MilyVet====")
+        print("1. Registrar Mascota")
+        print("2. Registrar Cita")
+        print("3. Cambiar Contraseña")
+        print("4. Registrar Atención")
+        print("5. Pagar cita")
+        print("6. Cerrar Sesión")
+
+        # Se pide al usuario que ingrese una opción
+        opcion = int(input("Ingrese una opción: "))
+
+        # Se evalúa la opción ingresada en el Menú del Sistema
+        match opcion:
+
+            # REGISTRAR MASCOTA
+            case 1:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                print("Ha seleccionado la opción 1")
+
+            # REGISTRAR CITA
+            case 2:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                print("Ha seleccionado la opción 2")
+
+            # CAMBIAR CONTRASEÑA
+            case 3:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                #Se ejecuta función cambiar_contrasena
+                cambiar_contrasena(correo_usuario)
+
+            # REGISTRAR ATENCIÓN
+            case 4:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                print("Ha seleccionado la opción 4")
+
+            # PAGAR CITA
+            case 5:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                print("Ha seleccionado la opción 5")
+
+            #SALIR
+            case _:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                #Se imprime mensaje de despedida
+                print("¡Sesión Cerrada con Éxito! ✅\n")
+
+                # Se espera que el usuario presione enter para continuar
+                input("Presione Enter para continuar...")
+
+                #Se sale del bucle
+                break
+
+################################
+
+
+
+#====FUNCIONES MENU DEL SISTEMA====#
+
+####FUNCION CAMBIAR CONTRASEÑA####
+def cambiar_contrasena(correo_usuario):
+
+    #Se busca el correo del usuario en la "tabla_usuarios"
+    for user in tabla_usuarios:
+        # Cuando se encuentra al objeto corespondiente
+        if user.correo == correo_usuario:
+
+            # La validación de la contraseña se realiza mediante un bucle while
+            while True:
+
+                # Se solicita al usuario ingresar una contraseña nueva
+                password_nueva = getpass.getpass("Ingrese una contraseña nueva: ")
+
+                # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
+                valida = validar_contrasena(password_nueva)
+
+                # Si la función retorna el string "valida", se sale del while
+                if valida == "valida":
+                    break
+                # Caso contrario, si la función retorna el string "inicial", se vuelve al menú del sistema
+                elif(valida == "inicial"):
+                    return
+                #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
+                else:
+                    limpiar_pantalla()
+
+            # Se actualiza la contraseña del usuario
+            user.contrasena = password_nueva
+
+            # Se imprime mensaje de éxito
+            print(f"\n¡Contraseña actualizada! ✅")
+
+            # Se solicita al usuario presionar "Enter" para continuar
+            input("\nPresione Enter para continuar...")
+
+            # Se retorna al menú del sistema
+            return
+
+##################################
+
+#==================================#
+
+
+
+####FUNCION INICIAR SESION####
+def iniciar_sesion():
+
+    # Se solicita al usuario ingresar su correo
+    correo = input("Ingresar correo: ")
+
+    # Se solicita al usuario ingresar su contraseña
+    contrasena = getpass.getpass("Ingresar contraseña: ")
+
+    # Se itera sobre los objetos user del arreglo tabla_usuarios
+    for user in tabla_usuarios:
+        # Si el correo y la contaseña del objeto user coincide con las ingresadas
+        if user.correo == correo and user.contrasena == contrasena:
+            # Se muestra el mensaje de éxito respectivo
+            print("\nInicio de Sesión Correcto ✅")
+
+            # Se espera que el usuario presione enter para continuar
+            input("\nPresione Enter para continuar...")
+
+            # Se ejecuta la función menu_sistema y se envía como parámetro el correo ingresado
+            menu_sistema(correo)
+
+            # Se retorna el Menú Inicial
+            return
+
+    # Si no se encuentra un objeto user cuyo correo y contraseña coincida con los ingresados, se muestra el mensaje de error respectivo
+    print("\nCorreo ó Contraseña incorrecta ❌")
+
+    # Se espera que el usuario presione enter para continuar, luego de ello se retorna al Menú Inicial
+    input("\nPresione Enter para continuar...")
+
+##############################
 
 ####FUNCION NUEVO USUARIO####
 def nuevo_usuario():
@@ -240,7 +397,7 @@ while True:
     #Se limpia la pantalla
     limpiar_pantalla()
     
-    #Se muestra el menú inicial
+    #Se muestra el Menú Inicial
     print(r"""
   /\_/\        __  ____ ___ _    __     __       / \__ 
  ( o.o )      /  |/  (_) (_) |  / /__  / /_     (    @\_
@@ -265,7 +422,8 @@ while True:
             #Se limpia la pantalla
             limpiar_pantalla()
 
-            print("Ha seleccionado la opción 1")
+            # Se ejecuta función iniciar_sesion
+            iniciar_sesion()
 
         #NUEVO USUARIO
         case 2:
@@ -289,7 +447,7 @@ while True:
             limpiar_pantalla()
 
             #Se imprime mensaje de despedida
-            print("Hasta luego...\n")
+            print("🐶🐱Hasta luego🐾...\n")
 
             #Se sale del bucle
             break
