@@ -1,18 +1,29 @@
-#MilivetV2
+# Intranet MilivetV2
 
-#Importar módulo os para crear la función "limpiar_pantalla"
+# Importar módulo os para crear la función "limpiar_pantalla"
 import os
 
-#Importar módulo getpass para ocultar las contraseñas ingresadas por los usuarios
+# Importar módulo getpass para ocultar las contraseñas ingresadas por los usuarios
 import getpass
 
-#Importar módulo re para usar regex
+# Importar módulo re para usar regex
 import re
+
+# Importar la clase datetime (módulo datetime) para validar la fecha de nacimiento de las mascotas
+from datetime import datetime
 
 ####CONSTRUCCION DE LA BASE DE DATOS####
 
+#Se crea un diccionario que ayudará a crear el ID al registrar una mascota
+contador_id = {
+    "CAN": 1
+}
+
 #Se crea una lista de usuarios para simular una tabla de BD
 tabla_usuarios = []
+
+#Se crea una lista de mascotas para simular una tabla de BD
+tabla_mascotas = []
 
 #Se crea la clase usuario
 class Usuario:
@@ -21,11 +32,22 @@ class Usuario:
         self.contrasena = contrasena
         self.preguntas_respuestas = preguntas_respuestas
 
+#Se crea la clase mascota
+class Mascota:
+    def __init__(self, id, correo_dueno, nombre, sexo, especie, raza, fecha_nacimiento, peso_kg):
+        self.id = id
+        self.correo_dueno = correo_dueno
+        self.nombre = nombre
+        self.especie = especie
+        self.raza = raza
+        self.fecha_nacimiento = fecha_nacimiento
+        self.peso = peso_kg
+
 #Se crea un usuario de prueba
 usuario1 = Usuario(
-    correo="luis.alberca.munive@gmail.com",
-    contrasena="clave123",
-    preguntas_respuestas=[
+    correo = "luis.alberca.munive@gmail.com",
+    contrasena = "clave123",
+    preguntas_respuestas = [
         ("¿Nombre de tu mascota?", "firulais"),
         ("¿Ciudad donde naciste?", "lima"),
         ("¿Película favorita?", "matrix")
@@ -34,6 +56,21 @@ usuario1 = Usuario(
 
 #Se agrega el usuario creado a la "tabla_usuarios"
 tabla_usuarios.append(usuario1)
+
+#Se crea una mascota de prueba
+mascota1 = Mascota(
+    id = "CAN-001",
+    correo_dueno = "luis.alberca.munive@gmail.com",
+    nombre = "Firulais",
+    sexo = "Macho",
+    especie = "Perro",
+    raza = "Bulldog",
+    fecha_nacimiento = "04/07/2025",
+    peso_kg = "24.50"
+)
+
+#Se agrega la mascota creada a la "tabla_mascotas"
+tabla_mascotas.append(mascota1)
 
 ########################################
 
@@ -183,6 +220,183 @@ def menu_sistema(correo_usuario):
 
 
 #====FUNCIONES MENU DEL SISTEMA====#
+
+####FUNCION GENERAR ID MASCOTA####
+def generar_id_mascota(especie):
+
+    # Se evalua la especie ()
+    match especie.lower():
+
+        # Si es Perro
+        case "Perro":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["CAN"] = contador_id.get("CAN", 0) + 1
+            # Se retorna el id generado
+            return f"CAN-{contador_id["CAN"]:03d}"
+        
+        # Si es Gato
+        case "Gato":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["FEL"] = contador_id.get("FEL", 0) + 1
+            # Se retorna el id generado
+            return f"FEL-{contador_id["FEL"]:03d}"
+        
+        # Si es Ave
+        case "Ave":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["AVE"] = contador_id.get("AVE", 0) + 1
+            # Se retorna el id generado
+            return f"AVE-{contador_id["AVE"]:03d}"
+        
+        # Si es Conejo
+        case "Conejo":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["CON"] = contador_id.get("CON", 0) + 1
+            # Se retorna el id generado
+            return f"CON-{contador_id["CON"]:03d}"
+        
+        # Si es Otro
+        case _:
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["OTR"] = contador_id.get("OTR", 0) + 1
+            # Se retorna el id generado
+            return f"OTR-{contador_id["OTR"]:03d}"
+##################################
+        
+ ####FUNCION REGISTRAR MASCOTA####
+def registrar_mascota(correo):
+
+    # Se ingresa el nombre de la mascota
+    nombre = input("Ingrese nombre de la mascota: ")
+
+    # Se ingresa el sexo de la mascota
+    while True:
+
+        # Se solicita ingresar el sexo de la mascota, se quitan los espacios en blanco adelante y atras del valor ingresado, y se coloca en mayúscula
+        sexo = input("Ingrese sexo Macho(M) ó Hembra(H): ").strip().upper()
+
+        # Se evalúa el valor ingresado
+        match sexo:
+
+            # Si el valor ingresado es "M" entonces se establece el valor de la variable "sexo" a "Macho"
+            case "M":
+                sexo = "Macho"
+                # Se sale del while
+                break
+
+            # Si el valor ingresado es "H" entonces se establece el valor de la variable "sexo" a "Hembra"
+            case "H":
+                sexo = "Hembra"
+                # Se sale del while
+                break
+
+            # Si el valor ingresado no es "M" ni "H", se muestra un mensaje de error
+            case _:
+                print("Valor ingresado inválido ❌")
+
+    # Se ingresa la especie de la mascota
+    while True:
+
+        # Se solicita ingresar la especie de la mascota, se quitan los espacios en blanco adelante y atras del valor ingresado, y se coloca en mayúscula
+        especie = input("Ingrese especie Perro(P), Gato(G), Ave(A), Conejo(C) u Otro(O): ").strip().upper()
+
+        # Se evalúa el valor ingresado
+        match especie:
+            # Si el valor ingresado es "P" entonces se establece el valor de la variable "especie" a "Perro"
+            case "P":
+                especie = "Perro"
+                # Se sale del while
+                break
+            
+            # Si el valor ingresado es "G" entonces se establece el valor de la variable "especie" a "Gato"
+            case "G":
+                especie = "Gato"
+                # Se sale del while
+                break
+            
+            # Si el valor ingresado es "A" entonces se establece el valor de la variable "especie" a "Ave"
+            case "A":
+                especie = "Ave"
+                # Se sale del while
+                break
+
+            # Si el valor ingresado es "C" entonces se establece el valor de la variable "especie" a "Conejo"
+            case "C":
+                especie = "Conejo"
+                # Se sale del while
+                break
+            
+            # Si el valor ingresado es "O" entonces se establece el valor de la variable "especie" a "Otro"
+            case "O":
+                especie = "Otro"
+                # Se sale del while
+                break
+            
+            # Si el valor ingresado no es ninguno de los solicitados, entonces se muestra el mensaje de error correspondiente
+            case _:
+                print("Valor ingresado inválido ❌")
+
+    # Se ingresa la raza de la mascota
+    raza = input("Ingrese raza: ")
+
+    # Se ingresa la fecha de nacimiento de la mascota
+    while True:
+
+        # Se solicita ingresar la fecha de nacimiento de la mascota en el formato dd/mm/yyyy, se quitan los espacios en blanco adelante y atras del valor ingresado
+        fecha_nacimiento = input("Ingrese fecha de nacimiento (dd/mm/yyyy) :").strip()
+
+        # Se valida que la fecha ingresada tenga el formato dd/mm/yyyy
+        try:
+            fecha_valida = datetime.strptime(fecha_nacimiento, "%d/%m/%Y")
+
+        # Si la validación arroja un error, entonces se muestra el mensaje de error respectivo y se vuelve al inicio del while
+        except ValueError:
+            print("Formato de fecha inválido ❌. Use dd/mm/yyyy (Ejemplo: 04/07/2025) y asegúrese de que la fecha exista.")  
+            continue  
+        
+        # Si la fecha ingresada es en el futuro, se muestra el mensaje de error respectivo y se vuelve al inicio del while
+        if fecha_valida > datetime.now():
+            print("La fecha de nacimiento no puede ser en el futuro ❌.")  
+            continue 
+        
+        # Si la fecha iingresada pasa por todas las validaciones, se sale del while
+        break
+
+    # Se ingresa el peso de la mascota en Kg
+    while True:
+
+        # Se solicita ingresar el peso de la mascota en Kg
+        try:
+            peso_kg = float(input("Ingrese peso en Kg: ")).strip()
+
+            # Si el peso es menor ó igual a cero, entonces se muestra el mensaje de error correspondiente
+            if peso_kg <= 0:
+                print("El peso debe ser mayor a 0.")
+            
+            # Si el peso peso es mayor a cero, se guarda el peso ingresado como string en formato de 2 decimales y se sale del while
+            else:
+                peso_kg = f"{peso_kg:.2f}"
+                break
+        
+        # Si el peso ingresado no es un número, se muestra el mensaje de error respectivo
+        except ValueError:
+            print("Ingrese un número válido (Ej: 25.50).")
+    
+    # Se crea el nuevo objeto mascota con los valores ingresados
+    mascota_nueva = Mascota(
+        id = generar_id_mascota(especie),
+        correo_dueno = correo,
+        nombre = nombre,
+        sexo = sexo,
+        especie = especie,
+        raza = raza,
+        fecha_nacimiento = fecha_nacimiento,
+        peso_kg = peso_kg
+    )
+
+    # Se agrega la nueva mascota al arreglo tabla_mascotas
+    tabla_mascotas.append(mascota_nueva)
+#################################
 
 ####FUNCION CAMBIAR CONTRASEÑA####
 def cambiar_contrasena(correo_usuario):
