@@ -21,6 +21,7 @@ while True:
         if usuario is None:
 
             print("Primero debe crear una cuenta.")
+            continue
 
         print(f"\n===INICIO DE SESION===")
 
@@ -40,6 +41,8 @@ while True:
             if tu_usuario == usuario and tu_contraseña == contraseña:
 
                 print(f"Ha iniciado sesion correctamente, bienvenido {usuario} ;D!")
+                print(f"El menu de opciones ha cambiado!")
+                print(f"Elija una de las opciones a continuacion: ")
 
                 #Menu de opciones
                 while True:
@@ -49,11 +52,19 @@ while True:
                     print(f" 3. Programar nueva cita")
                     print(f" 4. Reprogramar cita existente")
 
+                    #Elegir opcion
+                    opcion2 = int(input(f"Seleccione una opcion: "))
+
+                    if opcion2 == 1:
+
+                       
+
             elif tu_usuario != usuario and tu_contraseña != contraseña:
                 
                 intentos += 1
                 print(f"Usuario y/o contraseña incorrectos!")
                 print(f"Le quedan {max_intentos - intentos} intentos!")
+                continue
 
         if intentos == max_intentos:
 
