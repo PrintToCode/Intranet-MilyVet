@@ -1,5 +1,11 @@
 # Intranet MilivetV2
 
+
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║                      IMPORTAR LIBRERIAS                  ║
+# ╚══════════════════════════════════════════════════════════╝
+
 # Importar módulo os para crear la función "limpiar_pantalla"
 import os
 
@@ -12,7 +18,15 @@ import re
 # Importar la clase datetime (módulo datetime) para validar la fecha de nacimiento de las mascotas
 from datetime import datetime
 
-####CONSTRUCCION DE LA BASE DE DATOS####
+# ╔══════════════════════════════════════════════════════════╗
+# ║                  FIN IMPORTAR LIBRERIAS                  ║
+# ╚══════════════════════════════════════════════════════════╝
+
+
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║                  CONSTRUCCION DE BD                      ║
+# ╚══════════════════════════════════════════════════════════╝
 
 #Se crea un diccionario que ayudará a crear el ID al registrar una mascota
 contador_id = {
@@ -27,131 +41,12 @@ tabla_mascotas = []
 
 #Se crea la clase usuario
 class Usuario:
-    def __init__(self, correo, contrasena, preguntas_respuestas):
+    def __init__(self, correo, contrasena, preguntas_respuestas, bloqueado, rol):
         self.correo = correo
         self.contrasena = contrasena
         self.preguntas_respuestas = preguntas_respuestas
-
-        # nombres = input(f"Ingrese sus nombres: ")
-
-        # nombre1,nombre2 = nombres.split()
-
-        # apellidos = input(f"Ingrese sus apellidos: ")
-
-        # apellido1,apellido2 = apellidos.split()
-
-        # edad = int(input(f"Ingrese su edad: "))
-
-        # departamento = input(f"Ingrese el departamento: ")
-            
-        # provincia = input(f"Ingrese la provincia: ")
-
-        # distrito = input(f"Ingrese el distrito: ")
-
-        # direccion = input(f"Ingrese su direccion (Calle,avenida,Jiron): ")
-
-        # numero_domicilio = int(input(f"Ingrese su numero de domicilio: "))
-
-        # numero_dni = int(input(f"Ingrese su numero de DNI: "))
-
-        # marketing = input(f"Como se entero de nosotros?: ")
-
-        # #Confirmacion de datos ingresados
-        # print(f"Confirme su informacion antes de continuar!")
-
-        # print(f"Nombres: {nombre1} {nombre2}")
-        # print(f"Apellidos: {apellido1} {apellido2}")
-        # print(f"Edad: {edad}")
-        # print(f"Departamento: {departamento}")
-        # print(f"Provincia: {provincia}")
-        # print(f"Distrito: {distrito}")
-        # print(f"direccion: {direccion} {numero_domicilio}")
-        # print(f"Numero de DNI: {numero_dni} ")
-        # print(f"Como se entero de nosotros?: {marketing}")
-
-        # confirmacion = input(f"Toda su informacion esta correcta(escriba si/no?: ")
-
-        # #Creacion de usuario y contraseña
-        # if confirmacion.lower() == "si":
-
-        #     usuario(correo) = input(f"Crea tu usuario: ")
-
-        # print(f"Cuenta creada con exito, bienvenid@ {usuario}!")
-
-        #    elif confirmacion.lower() == "no":
-
-        #     #Modificacion de datos ingresados
-        #     while True:
-                  
-        #         print(f"Nombres: {nombre1} {nombre2}")
-        #         print(f"Apellidos: {apellido1} {apellido2}")
-        #         print(f"Edad: {edad}")
-        #         print(f"Departamento: {departamento}")
-        #         print(f"Provincia: {provincia}")
-        #         print(f"Distrito: {distrito}")
-        #         print(f"direccion: {direccion} {numero_domicilio}")
-        #         print(f"Numero de DNI: {numero_dni} ")
-        #         print(f"Como se entero de nosotros?: {marketing}")
-
-        #         dato = input(f"Que dato/s desea modificar?: ")
-
-        #         if dato.lower() == "nombres":
-
-        #             nombres = input(f"Ingrese nuevamente sus nombres: ")
-
-        #             nombre1,nombre2 = nombres.split()
-
-        #         elif dato.lower() == "apellidos":
-
-        #             apellidos = input(f"Ingrese nuevamente sus apellidos: ")
-
-        #             apellido1,apellido2 = apellidos.split()
-
-        #         elif dato.lower() == "edad":
-
-        #             edad = int(input(f"Ingrese nuevamente su edad: "))
-
-        #         elif dato.lower() == "departamento":
-
-        #             departamento = input(f"Ingrese nuevamente el departamento: ")
-
-        #         elif dato.lower() == "provincia":
-
-        #             provincia = input(f"Ingrese nuevamente la provincia: ")
-
-        #         elif dato.lower() == "distrito":
-
-        #             distrito = input(f"Ingrese nuevamente el distrito: ")
-
-        #         elif dato.lower() == "direccion":
-
-        #             direccion = input(f"Ingrese nuevamente la direccion: ")
-
-        #         elif dato.lower() == "domicilio":
-
-        #             numero_domicilio = int(input(f"Ingrese nuevamente el numero de domicilio: "))
-
-        #         elif dato.lower() == "dni":
-
-        #             numero_dni = int(input(f"Ingrese nuevamente el DNI: "))
-
-        #         elif dato.lower() == "marketing":
-
-        #             marketing = input(f"¿Cómo se enteró de nosotros?: ")
-
-        #         else:
-
-        #             print("Dato no válido.")
-        #             continue
-
-        #         confirmar = input(f"\n¿Desea seguir modificando datos? (si/no): ")
-
-        #         if confirmar.lower() == "no":
-        #             break
-
-        #         elif confirmar.lower() != "si":
-        #             print(f"Respuesta inválida. Debe ingresar 'si' o 'no'.")
-        
+        self.bloqueado = bloqueado
+        self.rol = rol
 
 #Se crea la clase mascota
 class Mascota:
@@ -173,7 +68,9 @@ usuario1 = Usuario(
         ("¿Nombre de tu mascota?", "firulais"),
         ("¿Ciudad donde naciste?", "lima"),
         ("¿Película favorita?", "matrix")
-    ]
+    ],
+    bloqueado = False,
+    rol = "VET"
 )
 
 #Se agrega el usuario creado a la "tabla_usuarios"
@@ -194,9 +91,15 @@ mascota1 = Mascota(
 #Se agrega la mascota creada a la "tabla_mascotas"
 tabla_mascotas.append(mascota1)
 
-########################################
+# ╔══════════════════════════════════════════════════════════╗
+# ║                  FIN CONSTRUCCION DE BD                  ║
+# ╚══════════════════════════════════════════════════════════╝
 
-####FUNCIONES####
+
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║                      FUNCIONES DE APOYO                  ║
+# ╚══════════════════════════════════════════════════════════╝
 
 ####FUNCION LIMPIAR PANTALLA####
 def limpiar_pantalla():
@@ -264,7 +167,454 @@ def validar_contrasena(contrasena):
 
 ##############################
 
-####FUNCION MENU DEL SISTEMA####
+####FUNCION VALIDAR CORREO####
+def validar_correo(correo_ingresado):
+    
+    # Se valida el correo ingresado utilizando Regex
+        validar_correo = re.fullmatch(r"[a-zA-Z1-9._-]+@[a-zA-Z1-9._-]+\.[a-zA-Z1-9]{2,}", correo_ingresado)
+
+        # Si el correo ingresado no cumple con el formato
+        if not validar_correo:
+            # Se inprime el mensaje de error respectivo
+            print("\nEl formato de correo ingresado no es válido ❌")
+
+            # Se utiliza un while para validar si el usuario quiere reintentar ingresar el correo
+            while True:
+                # Se espera que el usuario presione R para continuar o S para salir, elminan los espacios alrededor de la opción ingresada y se convierte a minúscula
+                reintentar = input("\nPresione (R) para reintentar ó (S) para salir: ").strip().lower()
+
+                # Se evalúa la opción ingresada
+                match reintentar:
+                    
+                    # Si es 'r'
+                    case 'r':
+                        # Se retorna el valor "reintentar"
+                        return "reintentar"
+
+                    # Si es 's'
+                    case 's':
+                        # Se retorna el valor "salir"
+                        return "salir"
+                    
+                    # Si la opción ingresada no es válida
+                    case _:
+                         # Se limpia la pantalla
+                        limpiar_pantalla()
+                        # Se imprime el mensaje de error correspondinete
+                        print("\nOpción inválida ❌")
+                        # Se pasa a la siguiente iteración del while que valida la variable 'reintentar'
+                        continue
+        # Si el correo ingresado cumple con el formato
+        else:
+            # Se retorna el valor "correcto"
+            return "correcto"
+##############################
+    
+####FUNCION GENERAR ID MASCOTA####
+def generar_id_mascota(especie):
+
+    # Se evalua la especie ()
+    match especie.lower():
+
+        # Si es Perro
+        case "perro":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["CAN"] = contador_id.get("CAN", 0) + 1
+            # Se retorna el id generado
+            return f"CAN-{contador_id["CAN"]:03d}"
+        
+        # Si es Gato
+        case "gato":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["FEL"] = contador_id.get("FEL", 0) + 1
+            # Se retorna el id generado
+            return f"FEL-{contador_id["FEL"]:03d}"
+        
+        # Si es Ave
+        case "ave":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["AVE"] = contador_id.get("AVE", 0) + 1
+            # Se retorna el id generado
+            return f"AVE-{contador_id["AVE"]:03d}"
+        
+        # Si es Conejo
+        case "conejo":
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["CON"] = contador_id.get("CON", 0) + 1
+            # Se retorna el id generado
+            return f"CON-{contador_id["CON"]:03d}"
+        
+        # Si es Otro
+        case _:
+            # Se actualiza el número de la especie en el diccionario contador_id
+            contador_id["OTR"] = contador_id.get("OTR", 0) + 1
+            # Se retorna el id generado
+            return f"OTR-{contador_id["OTR"]:03d}"
+##################################
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║                  FIN FUNCIONES DE APOYO                  ║
+# ╚══════════════════════════════════════════════════════════╝
+
+
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║                  FUNCIONES MENÚ INICIAL                  ║
+# ╚══════════════════════════════════════════════════════════╝
+
+####1.FUNCION MENU INICIAL####
+def menu_inicial():
+    while True:
+
+        #Se limpia la pantalla
+        limpiar_pantalla()
+        
+        #Se muestra el Menú Inicial
+        print(r"""
+    /\_/\        __  ____ ___ _    __     __       / \__ 
+    ( o.o )      /  |/  (_) (_) |  / /__  / /_     (    @\_
+    > ^ <      / /|_/ / / / /| | / / _ \/ __/     /       O
+                / /  / / / / / | |/ /  __/ /_      /   (____/
+            /_/  /_/_/_/_/  |___/\___/\__/      /___/  U  
+    """)
+        print("====MENU INICIAL - MilyVet====")
+        print("1. Iniciar Sesion")
+        print("2. Nuevo Usuario")
+        print("3. Recuperar Contraseña")
+        print("4. Salir")
+
+        #Se pide al usuario que ingrese una opción
+        main_option = int(input("Ingrese una opción: "))
+
+        #Se evalúa la opción ingresada en el menú inicial
+        match main_option:
+
+            #INICIAR SESION
+            case 1:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                # Se ejecuta función iniciar_sesion
+                iniciar_sesion()
+
+            #NUEVO USUARIO
+            case 2:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                #Se ejecuta función nuevo_usuario
+                nuevo_usuario()
+
+            #RECUPERAR CONTRASEÑA
+            case 3:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                #Se ejecuta función recuperar_contrasena
+                recuperar_contrasena()
+
+            #SALIR
+            case _:
+                #Se limpia la pantalla
+                limpiar_pantalla()
+
+                #Se imprime mensaje de despedida
+                print("🐶🐱Hasta luego🐾...\n")
+
+                #Se sale del bucle
+                break
+############################
+
+####1.1.FUNCION INICIAR SESION####
+def iniciar_sesion():
+
+    # While que se utiliza para validar la variable "correo"
+    while True:
+
+        # Se solicita al usuario ingresar su correo
+        correo = input("\nIngresar correo: ").strip().lower()
+        
+        # Se valida el correo ingresado
+        correo_valido = validar_correo(correo)
+
+        # Se evalúa el valor de la variable "correo_valido"
+        match correo_valido:
+
+            # Si es "reintentar"
+            case "reintentar":
+                # Se limpía la pantalla
+                limpiar_pantalla()
+                # Se pasa a la siguien te iteración del while que valida la variable "correo"
+                continue
+            
+            # Si es "salir"
+            case "salir":
+                # Se regresa al Menú Inicial
+                return
+            
+            # Si es "correcto"
+            case "correcto":
+                # Se sale del while que valida la variable "correo"
+                break
+
+    # Se itera sobre los objetos user del arreglo tabla_usuarios
+    for user in tabla_usuarios:
+
+        # Si se encuentra el correo ingresado
+        if user.correo == correo:
+
+            # Si la cuenta está bloqueada
+            if user.bloqueado:
+                # Se imprime el mensaje correspondiente
+                print("\n¡La cuenta se encuentra bloqueada! ❌")
+
+                # Se espera que el usuario presione enter para continuar
+                input("\nPresione cualquier tecla para continuar...")
+
+                # Se retorna el Menú Inicial
+                return
+            
+            # Si la cuenta no está bloqueada
+            else:
+
+                # Se solicita ingresar la contraseña hasta un máximo de 3 veces
+                for intentos in range(3):
+                    # Se solicita al usuario ingresar la contraseña de la cuenta
+                    contrasena = getpass.getpass("Ingresar contraseña: ")
+
+                    # Si la contraseña ingresada coincide con la contraseña del objeto usuario
+                    if user.contrasena == contrasena:
+
+                        # Se muestra el mensaje de éxito respectivo
+                        print("\nInicio de Sesión Correcto ✅")
+
+                        # Se espera que el usuario presione enter para continuar
+                        input("\nPresione cualquier tecla para continuar...")
+
+                        # Se ejecuta la función menu_sistema y se envía como parámetro el correo ingresado
+                        menu_sistema(correo)
+
+                        # Se retorna el Menú Inicial
+                        return
+                    
+                    #Si la contraseña ingresada no coincide con la contraseña del objeto usuario
+                    else:
+                            # Se muestra el mensaje de error respectivo
+                            print(f"\nContraseña incorrecta ❌. Le quedan {2 - intentos} intentos.")
+
+                # Si se superan los 3 intentos, se bloquea la cuenta
+                user.bloqueado = True
+
+                # Se imprime el mensaje correspondiente
+                print("\n¡Se bloqueó la cuenta! ❌")
+
+                # Se espera que el usuario presione enter para continuar
+                input("\nPresione cualquier tecla para continuar...")
+
+                # Se retorna el Menú Inicial
+                return
+
+    # Si no se encuenra el correo ingresado, se imprime el mensaje correspondiente
+    print("\n¡No se encontró el correo ingresado! ❌")
+
+    # Se espera que el usuario presione enter para continuar
+    input("\nPresione cualquier tecla para continuar...")
+        
+##############################
+
+####1.2.FUNCION NUEVO USUARIO####
+def nuevo_usuario():
+
+    # While que se utiliza para validar la variable "correo"
+    while True:
+
+        # Se solicita al usuario ingresar su correo
+        correo = input("\nIngresar correo: ").strip().lower()
+
+        # Se valida el correo ingresado
+        correo_valido = validar_correo(correo)
+
+        # Se evalúa el valor de la variable "correo_valido"
+        match correo_valido:
+
+            # Si es "reintentar"
+            case "reintentar":
+                # Se limpía la pantalla
+                limpiar_pantalla()
+                # Se pasa a la siguien te iteración del while que valida la variable "correo"
+                continue
+            
+            # Si es "salir"
+            case "salir":
+                # Se regresa al Menú Inicial
+                return
+            
+            # Si es "correcto"
+            case "correcto":
+                # Se sale del while que valida la variable "correo"
+                break
+
+    # Se verifica si el correo ingresado ya se encuentra registrado
+    for user in tabla_usuarios:
+        # Si el correo ingresado por el usuario ya se encuentra registrado, entonces se retorna al menú inicial
+        if (user.correo).lower() == correo.lower():
+            print("\nEl correo ingresado ya se encuentra registrado ❌\n")
+            input("Presione cualquier tecla para continuar...")
+            return
+
+    # La validación de la contraseña se realiza mediante un bucle while
+    while True:
+
+        # Se solicita al usuario ingresar su contraseña
+        contrasena = getpass.getpass("Ingresar contraseña: ")
+
+        # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
+        valida = validar_contrasena(contrasena)
+
+        # Si la función retorna el string "valida", se sale del while
+        if valida == "valida":
+            break
+        # Caso contrario, si la función retorna el string "inicial", se vuelve al menú inicial
+        elif(valida == "inicial"):
+            return
+        #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
+        else:
+            limpiar_pantalla()
+
+    # Se define un arreglo para ingresar las tuplas: pregunta, respuesta del usuario
+    preguntas_respuestas = []
+
+    # Se utiliza un for para que el usuario pueda ingresar las 3 tuplas de pregunta, respuesta
+    for i in range(3):
+        # Se solicita al usuario que ingrese una pregunta de seguridad
+        pregunta = input(f"\nEscriba pregunta de seguridad {i + 1}: ")
+        # Se solicita al usuario que ingrese una respuesta de seguridad
+        respuesta = getpass.getpass(f"Escriba respuesta de seguridad {i + 1}: ")
+        # Se agrega la tupla pregunta, respuesta ingresada por el usuario a al arreglo preguntas_respuestas
+        preguntas_respuestas.append((pregunta, respuesta))
+    
+    # Se crea el objeto usuario_nuevo con los datos ingresados
+    usuario_nuevo = Usuario(
+        correo = correo,
+        contrasena = contrasena,
+        preguntas_respuestas = preguntas_respuestas,
+        bloqueado = False,
+        rol = "USER"
+    )
+
+    # Se agrega el nuevo objeto de usuario al arreglo tabla_usuarios
+    tabla_usuarios.append(usuario_nuevo)
+
+    # Se imprime mensaje de confirmación
+    print("\n¡Usuario creado de manera exitosa! ✅")
+
+    # Se espera que el usuario presione enter para continuar
+    input("\nPresione cualquier tecla para continuar...")
+####################################
+
+####1.3.FUNCION RECUPERAR CONTRASEÑA####
+def recuperar_contrasena():
+
+    # While que se utiliza para validar la variable "correo_ingresado"
+    while True:
+
+        #Se pide al usuario que introduzca su correo
+        correo_ingresado = input("Ingrese su correo: ").strip().lower()
+
+        # Se valida el correo ingresado
+        correo_valido = validar_correo(correo_ingresado)
+
+        # Se evalúa el valor de la variable "correo_valido"
+        match correo_valido:
+
+            # Si es "reintentar"
+            case "reintentar":
+                # Se limpía la pantalla
+                limpiar_pantalla()
+                # Se pasa a la siguien te iteración del while que valida la variable "correo"
+                continue
+            
+            # Si es "salir"
+            case "salir":
+                # Se regresa al Menú Inicial
+                return
+            
+            # Si es "correcto"
+            case "correcto":
+                # Se sale del while que valida la variable "correo"
+                break
+
+    #Se busca el correo ingresado en la "tabla_usuarios"
+    for user in tabla_usuarios:
+        # Si se encuentra el usuario
+        if user.correo == correo_ingresado:
+
+            print("\n¡Usuario encontrado!✅ Responda las siguientes preguntas de seguridad: \n")
+            
+            # Se solicita al usuario contestar de manera correcta las 3 preguntas de seguridad
+            for pregunta, respuesta in user.preguntas_respuestas:
+                respuesta_usuario = getpass.getpass(f"{pregunta}\n")
+                # Si contesta de manera errónea alguna pregunta de seguridad
+                if respuesta_usuario != respuesta:
+                    print("Respuesta Incorreta ❌\n")
+                    input("Presione cualquier tecla para continuar...")
+                    # Se retorna al menú inicial
+                    return
+                # Si el usuario contesta de manera correcta las 3 preguntas de seguridad, entonces se le solicita una nueva contraseña
+                else:
+                    print("Respuesta Correcta ✅\n")
+            
+            print("Ha contestado de manera correcta todas las preguntas ✅\n")
+
+            # La validación de la contraseña se realiza mediante un bucle while
+            while True:
+
+                # Se solicita al usuario ingresar una contraseña nueva
+                password_nueva = getpass.getpass("Ingrese una contraseña nueva: ")
+
+                # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
+                valida = validar_contrasena(password_nueva)
+
+                # Si la función retorna el string "valida", se sale del while
+                if valida == "valida":
+                    break
+                # Caso contrario, si la función retorna el string "inicial", se vuelve al menú inicial
+                elif(valida == "inicial"):
+                    return
+                #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
+                else:
+                    limpiar_pantalla()
+
+            # Se actualiza la contraseña del usuario
+            user.contrasena = password_nueva
+
+            # Se imprime mensaje de éxito
+            print(f"\n¡Contraseña actualizada! ✅")
+
+            # Se solicita al usuario presionar "Enter" para continuar
+            input("\nPresione cualquier tecla para continuar...")
+
+            # Se retorna al menú inicial
+            return
+
+    # Si no se encuentra al usuario en el arreglo "tabla_usuarios"
+    print("\nNo se encontró el usuario ❌\n")
+
+    # Se imprime el mensaje de error correspondiente
+    input("Presione cualquier tecla para continuar...")
+####################################
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║              FIN FUNCIONES MENÚ INICIAL                  ║
+# ╚══════════════════════════════════════════════════════════╝
+
+
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║              FUNCIONES MENÚ DEL SISTEMA                  ║
+# ╚══════════════════════════════════════════════════════════╝
+
+####2.FUNCION MENU DEL SISTEMA####
 def menu_sistema(correo_usuario):
 
     while True:
@@ -333,63 +683,14 @@ def menu_sistema(correo_usuario):
                 print("¡Sesión Cerrada con Éxito! ✅\n")
 
                 # Se espera que el usuario presione enter para continuar
-                input("Presione Enter para continuar...")
+                input("Presione cualquier tecla para continuar...")
 
                 # Se sale del bucle
                 break
 
 ################################
 
-
-
-
-
-
-#====FUNCIONES MENU DEL SISTEMA====#
-
-####FUNCION GENERAR ID MASCOTA####
-def generar_id_mascota(especie):
-
-    # Se evalua la especie ()
-    match especie.lower():
-
-        # Si es Perro
-        case "perro":
-            # Se actualiza el número de la especie en el diccionario contador_id
-            contador_id["CAN"] = contador_id.get("CAN", 0) + 1
-            # Se retorna el id generado
-            return f"CAN-{contador_id["CAN"]:03d}"
-        
-        # Si es Gato
-        case "gato":
-            # Se actualiza el número de la especie en el diccionario contador_id
-            contador_id["FEL"] = contador_id.get("FEL", 0) + 1
-            # Se retorna el id generado
-            return f"FEL-{contador_id["FEL"]:03d}"
-        
-        # Si es Ave
-        case "ave":
-            # Se actualiza el número de la especie en el diccionario contador_id
-            contador_id["AVE"] = contador_id.get("AVE", 0) + 1
-            # Se retorna el id generado
-            return f"AVE-{contador_id["AVE"]:03d}"
-        
-        # Si es Conejo
-        case "conejo":
-            # Se actualiza el número de la especie en el diccionario contador_id
-            contador_id["CON"] = contador_id.get("CON", 0) + 1
-            # Se retorna el id generado
-            return f"CON-{contador_id["CON"]:03d}"
-        
-        # Si es Otro
-        case _:
-            # Se actualiza el número de la especie en el diccionario contador_id
-            contador_id["OTR"] = contador_id.get("OTR", 0) + 1
-            # Se retorna el id generado
-            return f"OTR-{contador_id["OTR"]:03d}"
-##################################
-        
- ####FUNCION REGISTRAR MASCOTA####
+ ####2.1.FUNCION REGISTRAR MASCOTA####
 def registrar_mascota(correo):
 
     errores = 0
@@ -406,7 +707,7 @@ def registrar_mascota(correo):
             print("Demasiados intentos ❌")
 
             # Se solicita al usuario presionar "Enter" para continuar
-            input("\nPresione Enter para continuar...")
+            input("\nPresione cualquier tecla para continuar...")
 
             # Retorna True
             return True
@@ -601,7 +902,13 @@ def registrar_mascota(correo):
                     if validar_errores(): return
 #################################
 
-####FUNCION CAMBIAR CONTRASEÑA####
+####2.2.FUNCION REGISTRAR CITA####
+
+#Ángela y Manuel aquí su código :)
+
+##################################
+
+####2.3.FUNCION CAMBIAR CONTRASEÑA####
 def cambiar_contrasena(correo_usuario):
 
     #Se busca el correo del usuario en la "tabla_usuarios"
@@ -635,251 +942,41 @@ def cambiar_contrasena(correo_usuario):
             print(f"\n¡Contraseña actualizada! ✅")
 
             # Se solicita al usuario presionar "Enter" para continuar
-            input("\nPresione Enter para continuar...")
+            input("\nPresione cualquier tecla para continuar...")
 
             # Se retorna al menú del sistema
             return
 
 ##################################
 
-####FUNCION REGISTRAR CITA (Angela y Manuel QA)####
+####2.4.FUNCION REGISTRAR ATENCIÓN####
 
-###FUNCION REGISTRAR ATENCIÓN (Daniel Y Luis QA)####
+#Daniel y Luis aquí su código :)
 
-###FUNCION PAGAR CITA (Daniela y Manuel QA)####
+######################################
 
-####INTEGRACION V1 (Luis Alberca QA)####
+####2.5.FUNCION PAGAR CITA####
 
-#==================================#
+#Daniela y Manuel aquí su código :)
+
+######################################
+
+# ╔══════════════════════════════════════════════════════════╗
+# ║          FIN FUNCIONES MENÚ DEL SISTEMA                  ║
+# ╚══════════════════════════════════════════════════════════╝
 
 
 
+# ╔══════════════════════════════════════════════════════════╗
+# ║          INICIO DEL PROGRAMA                             ║
+# ╚══════════════════════════════════════════════════════════╝
 
+# Se inicia el programa llamando la función "menu_inicial"
+menu_inicial()
 
-
-####FUNCION INICIAR SESION####
-def iniciar_sesion():
-
-    # Se solicita al usuario ingresar su correo
-    correo = input("Ingresar correo: ")
-
-    # Se solicita al usuario ingresar su contraseña
-    contrasena = getpass.getpass("Ingresar contraseña: ")
-
-    # Se itera sobre los objetos user del arreglo tabla_usuarios
-    for user in tabla_usuarios:
-        # Si el correo y la contaseña del objeto user coincide con las ingresadas
-        if user.correo == correo and user.contrasena == contrasena:
-            # Se muestra el mensaje de éxito respectivo
-            print("\nInicio de Sesión Correcto ✅")
-
-            # Se espera que el usuario presione enter para continuar
-            input("\nPresione Enter para continuar...")
-
-            # Se ejecuta la función menu_sistema y se envía como parámetro el correo ingresado
-            menu_sistema(correo)
-
-            # Se retorna el Menú Inicial
-            return
-
-    # Si no se encuentra un objeto user cuyo correo y contraseña coincida con los ingresados, se muestra el mensaje de error respectivo
-    print("\nCorreo ó Contraseña incorrecta ❌")
-
-    # Se espera que el usuario presione enter para continuar, luego de ello se retorna al Menú Inicial
-    input("\nPresione Enter para continuar...")
-
-##############################
-
-####FUNCION NUEVO USUARIO####
-def nuevo_usuario():
-
-    # Se solicita al usuario ingresar su correo
-    correo = input("Ingresar correo: ")
-
-    # Se verifica si el correo ingresado ya se encuentra registrado
-    for user in tabla_usuarios:
-        # Si el correo ingresado por el usuario ya se encuentra registrado, entonces se retorna al menú inicial
-        if (user.correo).lower() == correo.lower():
-            print("\nEl correo ingresado ya se encuentra registrado ❌\n")
-            input("Presione Enter para continuar...")
-            return
-
-    # La validación de la contraseña se realiza mediante un bucle while
-    while True:
-
-        # Se solicita al usuario ingresar su contraseña
-        contrasena = getpass.getpass("Ingresar contraseña: ")
-
-        # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
-        valida = validar_contrasena(contrasena)
-
-        # Si la función retorna el string "valida", se sale del while
-        if valida == "valida":
-            break
-        # Caso contrario, si la función retorna el string "inicial", se vuelve al menú inicial
-        elif(valida == "inicial"):
-            return
-        #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
-        else:
-            limpiar_pantalla()
-
-    # Se define un arreglo para ingresar las tuplas: pregunta, respuesta del usuario
-    preguntas_respuestas = []
-
-    # Se utiliza un for para que el usuario pueda ingresar las 3 tuplas de pregunta, respuesta
-    for i in range(3):
-        # Se solicita al usuario que ingrese una pregunta de seguridad
-        pregunta = input(f"\nEscriba pregunta de seguridad {i + 1}: ")
-        # Se solicita al usuario que ingrese una respuesta de seguridad
-        respuesta = getpass.getpass(f"Escriba respuesta de seguridad {i + 1}: ")
-        # Se agrega la tupla pregunta, respuesta ingresada por el usuario a al arreglo preguntas_respuestas
-        preguntas_respuestas.append((pregunta, respuesta))
-    
-    # Se crea el objeto usuario_nuevo con los datos ingresados
-    usuario_nuevo = Usuario(
-        correo = correo,
-        contrasena = contrasena,
-        preguntas_respuestas = preguntas_respuestas
-    )
-
-    # Se agrega el nuevo objeto de usuario al arreglo tabla_usuarios
-    tabla_usuarios.append(usuario_nuevo)
-
-    # Se imprime mensaje de confirmación
-    print("\n¡Usuario creado de manera exitosa! ✅")
-
-    # Se espera que el usuario presione enter para continuar
-    input("\nPresione Enter para continuar...")
-####################################
-
-####FUNCION RECUPERAR CONTRASEÑA####
-def recuperar_contrasena():
-    #Se pide al usuario que introduzca su correo
-    correo_ingresado = input("Ingrese su correo: ")
-
-    #Se busca el correo ingresado en la "tabla_usuarios"
-    for user in tabla_usuarios:
-        # Si se encuentra el usuario
-        if user.correo == correo_ingresado:
-
-            print("\n¡Usuario encontrado!✅ Responda las siguientes preguntas de seguridad: \n")
-            
-            # Se solicita al usuario contestar de manera correcta las 3 preguntas de seguridad
-            for pregunta, respuesta in user.preguntas_respuestas:
-                respuesta_usuario = getpass.getpass(f"{pregunta}\n")
-                # Si contesta de manera errónea alguna pregunta de seguridad
-                if respuesta_usuario != respuesta:
-                    print("Respuesta Incorreta ❌\n")
-                    input("Presione Enter para continuar...")
-                    # Se retorna al menú inicial
-                    return
-                # Si el usuario contesta de manera correcta las 3 preguntas de seguridad, entonces se le solicita una nueva contraseña
-                else:
-                    print("Respuesta Correcta ✅\n")
-            
-            print("Ha contestado de manera correcta todas las preguntas ✅\n")
-
-            # La validación de la contraseña se realiza mediante un bucle while
-            while True:
-
-                # Se solicita al usuario ingresar una contraseña nueva
-                password_nueva = getpass.getpass("Ingrese una contraseña nueva: ")
-
-                # Se envía la contraseña introducida por el usuario a la función validar_contrasena para evaluar su complejidad.
-                valida = validar_contrasena(password_nueva)
-
-                # Si la función retorna el string "valida", se sale del while
-                if valida == "valida":
-                    break
-                # Caso contrario, si la función retorna el string "inicial", se vuelve al menú inicial
-                elif(valida == "inicial"):
-                    return
-                #Caso contrario(reintentar), se limpia la pantalla y se repite el bucle
-                else:
-                    limpiar_pantalla()
-
-            # Se actualiza la contraseña del usuario
-            user.contrasena = password_nueva
-
-            # Se imprime mensaje de éxito
-            print(f"\n¡Contraseña actualizada! ✅")
-
-            # Se solicita al usuario presionar "Enter" para continuar
-            input("\nPresione Enter para continuar...")
-
-            # Se retorna al menú inicial
-            return
-
-    # Si no se encuentra al usuario en el arreglo "tabla_usuarios"
-    print("\nNo se encontró el usuario ❌\n")
-
-    # Se imprime el mensaje de error correspondiente
-    input("Presione Enter para continuar...")
-####################################
-
-#################
-
-#Menu Inicial
-while True:
-
-    #Se limpia la pantalla
-    limpiar_pantalla()
-    
-    #Se muestra el Menú Inicial
-    print(r"""
-  /\_/\        __  ____ ___ _    __     __       / \__ 
- ( o.o )      /  |/  (_) (_) |  / /__  / /_     (    @\_
-  > ^ <      / /|_/ / / / /| | / / _ \/ __/     /       O
-            / /  / / / / / | |/ /  __/ /_      /   (____/
-           /_/  /_/_/_/_/  |___/\___/\__/      /___/  U  
-""")
-    print("====MENU INICIAL - MilyVet====")
-    print("1. Iniciar Sesion")
-    print("2. Nuevo Usuario")
-    print("3. Recuperar Contraseña")
-    print("4. Salir")
-
-    #Se pide al usuario que ingrese una opción
-    main_option = int(input("Ingrese una opción: "))
-
-    #Se evalúa la opción ingresada en el menú inicial
-    match main_option:
-
-        #INICIAR SESION
-        case 1:
-            #Se limpia la pantalla
-            limpiar_pantalla()
-
-            # Se ejecuta función iniciar_sesion
-            iniciar_sesion()
-
-        #NUEVO USUARIO
-        case 2:
-            #Se limpia la pantalla
-            limpiar_pantalla()
-
-            #Se ejecuta función nuevo_usuario
-            nuevo_usuario()
-
-        #RECUPERAR CONTRASEÑA
-        case 3:
-            #Se limpia la pantalla
-            limpiar_pantalla()
-
-            #Se ejecuta función recuperar_contrasena
-            recuperar_contrasena()
-
-        #SALIR
-        case _:
-            #Se limpia la pantalla
-            limpiar_pantalla()
-
-            #Se imprime mensaje de despedida
-            print("🐶🐱Hasta luego🐾...\n")
-
-            #Se sale del bucle
-            break
-              
+# ╔══════════════════════════════════════════════════════════╗
+# ║          FIN DEL PROGRAMA                                ║
+# ╚══════════════════════════════════════════════════════════╝
           
 
 
