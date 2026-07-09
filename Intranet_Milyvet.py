@@ -89,7 +89,7 @@ class Pago:
         self.metodo = metodo
         self.monto = monto
         self.estado = estado
-        self.codigo_pago = codigo_pago
+        self.codigo_pago = self.codigo_pago
 
 #Se crea un usuario de prueba
 usuario1 = Usuario(
