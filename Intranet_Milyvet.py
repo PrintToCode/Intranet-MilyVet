@@ -904,7 +904,352 @@ def registrar_mascota(correo):
 
 ####2.2.FUNCION REGISTRAR CITA####
 
-#Ángela y Manuel aquí su código :)
+def registrar_cita(correo_usuario):
+
+    errores = 0
+
+    def validar_errores():
+        nonlocal errores
+
+        errores += 1
+
+        if errores >= 3:
+            print("\nDemasiados intentos ❌")
+            input("Presione Enter para continuar...")
+            return True
+
+        return False
+
+    while True:
+
+        limpiar_pantalla()
+
+        print("===== REGISTRAR CITA =====\n")
+
+        # Buscar mascotas del usuario logueado
+        mascotas_usuario = []
+
+        for mascota in tabla_mascotas:
+            if mascota.correo_dueno == correo_usuario:
+                mascotas_usuario.append(mascota)
+
+        # Validar que tenga mascotas
+        if len(mascotas_usuario) == 0:
+            print("No tiene mascotas registradas ❌")
+            input("\nPresione Enter para continuar...")
+            return
+
+        print("Seleccione una mascota:\n")
+
+        for i, mascota in enumerate(mascotas_usuario):
+            print(f"{i+1}. {mascota.nombre}")
+            print(f"   ID: {mascota.id}")
+            print(f"   Especie: {mascota.especie}")
+            print(f"   Raza: {mascota.raza}")
+            print("--------------------------------")
+
+        # Seleccionar mascota
+        while True:
+
+            try:
+
+                opcion = int(input("Ingrese una opción: "))
+
+                if opcion >= 1 and opcion <= len(mascotas_usuario):
+
+                    mascota_seleccionada = mascotas_usuario[opcion-1]
+                    errores = 0
+                    break
+
+                else:
+                    print("Opción inválida ❌")
+
+                    if validar_errores():
+                        return
+
+            except ValueError:
+
+                print("Debe ingresar un número ❌")
+
+                if validar_errores():
+                    return
+
+        limpiar_pantalla()
+
+        print("===== REGISTRAR CITA =====\n")
+
+        print("Mascota seleccionada")
+        print("---------------------------")
+        print(f"ID: {mascota_seleccionada.id}")
+        print(f"Nombre: {mascota_seleccionada.nombre}")
+        print(f"Especie: {mascota_seleccionada.especie}")
+        print(f"Raza: {mascota_seleccionada.raza}")
+        print()
+
+        tabla_medicos = [
+    {"nombre":"Dr. Carlos Pérez","especialidad":"Medicina General"},
+    {"nombre":"Dra. Ana Ruiz","especialidad":"Vacunación"},
+    {"nombre":"Dr. Luis Gómez","especialidad":"Desparasitación"},
+    {"nombre":"Dra. María Torres","especialidad":"Cirugía"}
+]
+        
+        #============================
+        # SELECCIONAR ESPECIALIDAD
+        #============================
+
+        while True:
+
+            print("Especialidades disponibles")
+            print("1. Medicina General")
+            print("2. Vacunación")
+            print("3. Desparasitación")
+            print("4. Cirugía")
+
+            opcion = input("\nSeleccione una opción: ").strip()
+
+            match opcion:
+
+                case "1":
+                    especialidad = "Medicina General"
+                    errores = 0
+                    break
+
+                case "2":
+                    especialidad = "Vacunación"
+                    errores = 0
+                    break
+
+                case "3":
+                    especialidad = "Desparasitación"
+                    errores = 0
+                    break
+
+                case "4":
+                    especialidad = "Cirugía"
+                    errores = 0
+                    break
+
+                case _:
+                    print("Opción inválida ❌")
+
+                    if validar_errores():
+                        return
+
+        limpiar_pantalla()
+
+        print("===== REGISTRAR CITA =====\n")
+
+        print(f"Mascota: {mascota_seleccionada.nombre}")
+        print(f"Especialidad: {especialidad}\n")
+
+        #============================
+        # MOSTRAR MÉDICOS
+        #============================
+
+        medicos_disponibles = []
+
+        for medico in tabla_medicos:
+
+            if medico["especialidad"] == especialidad:
+                medicos_disponibles.append(medico)
+
+        print("Médicos disponibles:\n")
+
+        for i, medico in enumerate(medicos_disponibles):
+            print(f"{i+1}. {medico['nombre']}")
+
+        while True:
+
+            try:
+
+                opcion = int(input("\nSeleccione un médico: "))
+
+                if opcion >= 1 and opcion <= len(medicos_disponibles):
+
+                    medico_seleccionado = medicos_disponibles[opcion-1]["nombre"]
+                    errores = 0
+                    break
+
+                else:
+
+                    print("Seleccione una opción válida ❌")
+
+                    if validar_errores():
+                        return
+
+            except ValueError:
+
+                print("Debe ingresar un número ❌")
+
+                if validar_errores():
+                    return
+
+        #============================
+        # FECHA
+        #============================
+
+        while True:
+
+            fecha = input("\nIngrese la fecha (dd/mm/yyyy): ").strip()
+
+            try:
+
+                fecha_valida = datetime.strptime(fecha,"%d/%m/%Y")
+
+                if fecha_valida.date() < datetime.now().date():
+
+                    print("No puede registrar citas en fechas pasadas ❌")
+
+                    if validar_errores():
+                        return
+
+                    continue
+
+                errores = 0
+                break
+
+            except ValueError:
+
+                print("Formato de fecha incorrecto ❌")
+
+                if validar_errores():
+                    return
+
+        #============================
+        # HORA
+        #============================
+
+        while True:
+
+            hora = input("Ingrese la hora (HH:MM): ").strip()
+
+            try:
+
+                hora_valida = datetime.strptime(hora,"%H:%M")
+
+                if hora_valida.hour < 8 or hora_valida.hour >= 18:
+
+                    print("Horario de atención: 08:00 a 18:00 ❌")
+
+                    if validar_errores():
+                        return
+
+                    continue
+
+                errores = 0
+                break
+
+            except ValueError:
+
+                print("Hora inválida ❌")
+
+                if validar_errores():
+                    return
+                
+        #============================
+        # VALIDAR DISPONIBILIDAD
+        #============================
+
+        disponible = True
+
+        for cita in tabla_citas:
+
+            if (cita.medico == medico_seleccionado and
+                cita.fecha == fecha and
+                cita.hora == hora):
+
+                disponible = False
+                break
+
+        if disponible == False:
+
+            print("\nEl médico ya tiene una cita registrada en ese horario ❌")
+            input("\nPresione Enter para continuar...")
+            continue
+
+        #============================
+        # MOSTRAR RESUMEN
+        #============================
+
+        limpiar_pantalla()
+
+        print("========== RESUMEN DE LA CITA ==========\n")
+
+        print(f"Mascota       : {mascota_seleccionada.nombre}")
+        print(f"ID Mascota    : {mascota_seleccionada.id}")
+        print(f"Especie       : {mascota_seleccionada.especie}")
+        print(f"Especialidad  : {especialidad}")
+        print(f"Médico        : {medico_seleccionado}")
+        print(f"Fecha         : {fecha}")
+        print(f"Hora          : {hora}")
+        print("----------------------------------------")
+
+        while True:
+
+            confirmar = input("\n¿Desea confirmar la cita? Si(S) No(N): ").strip().upper()
+
+            match confirmar:
+
+                case "S":
+
+                    nueva_cita = Cita(
+                        mascota_seleccionada.id,
+                        medico_seleccionado,
+                        especialidad,
+                        fecha,
+                        hora,
+                        "Pendiente"
+                    )
+
+                    tabla_citas.append(nueva_cita)
+
+                    print("\n¡Cita registrada correctamente! ✅")
+                    errores = 0
+                    break
+
+                case "N":
+
+                    print("\nRegistro cancelado.")
+                    errores = 0
+                    break
+
+                case _:
+
+                    print("Opción inválida ❌")
+
+                    if validar_errores():
+                        return
+
+        #============================
+        # REGISTRAR OTRA CITA
+        #============================
+
+        while True:
+
+            opcion = input("\n¿Desea registrar otra cita? Si(S) No(N): ").strip().upper()
+
+            match opcion:
+
+                case "S":
+
+                    errores = 0
+                    limpiar_pantalla()
+                    break
+
+                case "N":
+
+                    return
+
+                case _:
+
+                    print("Opción inválida ❌")
+
+                    if validar_errores():
+                        return
+
+        if opcion == "S":
+            continue
+
 
 ##################################
 
@@ -957,7 +1302,277 @@ def cambiar_contrasena(correo_usuario):
 
 ####2.5.FUNCION PAGAR CITA####
 
-#Daniela y Manuel aquí su código :)
+#####FUNCION PAGAR CITA######
+def pagar_cita(correo_usuario):
+
+    errores = 0
+
+    def validar_errores():
+        nonlocal errores
+        errores += 1
+        if errores >= 3:
+            print("\nDemasiados intentos ❌")
+            input("Presione Enter para continuar...")
+            return True
+        return False
+
+    while True:
+        limpiar_pantalla()
+        print("===== PAGAR CITA =====\n")
+
+        # IDs de las mascotas del usuario logueado
+        ids_mascotas_usuario = []
+        for mascota in tabla_mascotas:
+            if mascota.correo_dueno == correo_usuario:
+                ids_mascotas_usuario.append(mascota.id)
+
+        # Se buscan las citas pendientes de pago del usuario
+        citas_pendientes = []
+        for cita in tabla_citas:
+            if cita.id_mascota in ids_mascotas_usuario and cita.estado == "Pendiente":
+                citas_pendientes.append(cita)
+
+        if len(citas_pendientes) == 0:
+            print("No tiene citas pendientes de pago ❌")
+            input("\nPresione Enter para continuar...")
+            return
+
+        print("Seleccione la cita que desea pagar:\n")
+        for i, cita in enumerate(citas_pendientes):
+            monto = precios_especialidad.get(cita.especialidad, 50.00)
+            print(f"{i+1}. Mascota: {cita.id_mascota} | {cita.especialidad} | {cita.fecha} {cita.hora} | S/ {monto:.2f}")
+        print("--------------------------------")
+
+        # Seleccionar cita
+        while True:
+            try:
+                opcion = int(input("Ingrese una opción: "))
+                if 1 <= opcion <= len(citas_pendientes):
+                    cita_seleccionada = citas_pendientes[opcion - 1]
+                    errores = 0
+                    break
+                else:
+                    print("Opción inválida ❌")
+                    if validar_errores(): return
+            except ValueError:
+                print("Debe ingresar un número ❌")
+                if validar_errores(): return
+
+        monto_a_pagar = precios_especialidad.get(cita_seleccionada.especialidad, 50.00)
+
+        limpiar_pantalla()
+        print("===== PAGAR CITA =====\n")
+        print(f"Mascota      : {cita_seleccionada.id_mascota}")
+        print(f"Especialidad : {cita_seleccionada.especialidad}")
+        print(f"Fecha / Hora : {cita_seleccionada.fecha} {cita_seleccionada.hora}")
+        print(f"Monto a pagar: S/ {monto_a_pagar:.2f}\n")
+
+        #============================
+        # SELECCIONAR MÉTODO DE PAGO
+        #============================
+        while True:
+            print("Métodos de pago disponibles")
+            print("1. Tarjeta de crédito/débito")
+            print("2. Yape/Plin")
+            print("3. Efectivo (pago en caja)")
+
+            metodo_opcion = input("\nSeleccione una opción: ").strip()
+
+            match metodo_opcion:
+                case "1":
+                    pago_exitoso = pagar_con_tarjeta(monto_a_pagar)
+                    metodo = "Tarjeta"
+                    errores = 0
+                    break
+                case "2":
+                    pago_exitoso = pagar_con_yape_plin(monto_a_pagar)
+                    metodo = "Yape/Plin"
+                    errores = 0
+                    break
+                case "3":
+                    codigo_pago = pagar_con_efectivo(
+                        monto_a_pagar,
+                        cita_seleccionada.id_mascota,
+                        cita_seleccionada.especialidad,
+                        cita_seleccionada.fecha,
+                        cita_seleccionada.hora
+
+                    )
+                    pago_exitoso = True 
+                    metodo ="Efectivo"
+                    errores = 0
+                    break
+                case _:
+                    print("Opción inválida ❌")
+                    if validar_errores(): return
+
+        #============================
+        # REGISTRAR RESULTADO DEL PAGO
+        #============================
+        if pago_exitoso:
+
+             if metodo == "Efectivo":
+                estado_cita = "Pendiente"          # La cita sigue pendiente hasta que pague en caja
+                estado_pago = "Pendiente en caja"
+             else:
+                estado_cita = "Pagado"             # Tarjeta/Yape/Plin se confirman al instante
+                estado_pago = "Completado"
+
+             cita_seleccionada.estado = estado_cita
+
+             nuevo_pago = Pago(
+                cita_seleccionada.id_mascota,
+                cita_seleccionada.medico,
+                cita_seleccionada.fecha,
+                cita_seleccionada.hora,
+                metodo,
+                monto_a_pagar,
+                estado_pago,
+                codigo_pago 
+             )
+
+             # Se guarda el código de pago si el método fue efectivo
+             nuevo_pago.codigo_pago = codigo_pago
+
+             tabla_pagos.append(nuevo_pago)
+
+             if metodo == "Efectivo":
+                print(f"\n¡Código generado con éxito! Preséntelo en caja. ✅")
+             else:
+                print("\n¡Pago registrado con éxito! ✅")
+
+        else:
+            print("\nEl pago no pudo completarse ❌")
+
+        input("\nPresione Enter para continuar...")
+
+        #============================
+        # PAGAR OTRA CITA
+        #============================
+        while True:
+            otro = input("\n¿Desea pagar otra cita? Si(S) No(N): ").strip().upper()
+            match otro:
+                case "S":
+                    errores = 0
+                    break
+                case "N":
+                    return
+                case _:
+                    print("Opción inválida ❌")
+                    if validar_errores(): return
+
+####FUNCION PAGAR CON TARJETA ####
+def pagar_con_tarjeta(monto):
+
+    errores = 0
+
+    while True:
+
+        # Número de tarjeta: se valida que tenga 16 dígitos numéricos
+        numero_tarjeta = input("\nIngrese número de tarjeta (16 dígitos): ").strip().replace(" ", "")
+
+        if not re.fullmatch(r"\d{16}", numero_tarjeta):
+            print("Número de tarjeta inválido ❌. Debe contener 16 dígitos.")
+            errores += 1
+            if errores >= 3:
+                print("Demasiados intentos ❌")
+                return False
+            continue
+
+        # Fecha de vencimiento en formato MM/AA
+        vencimiento = input("Ingrese fecha de vencimiento (MM/AA): ").strip()
+
+        try:
+            fecha_venc = datetime.strptime(vencimiento, "%m/%y")
+        except ValueError:
+            print("Formato de fecha inválido ❌. Use MM/AA (Ejemplo: 09/27).")
+            errores += 1
+            if errores >= 3:
+                print("Demasiados intentos ❌")
+                return False
+            continue
+
+        # CVV oculto con getpass, se valida que tenga 3 dígitos
+        cvv = getpass.getpass("Ingrese CVV (3 dígitos): ").strip()
+
+        if not re.fullmatch(r"\d{3}", cvv):
+            print("CVV inválido ❌. Debe contener 3 dígitos.")
+            errores += 1
+            if errores >= 3:
+                print("Demasiados intentos ❌")
+                return False
+            continue
+
+        # Simulación de autorización del banco (siempre aprobado en esta versión de práctica)
+        print(f"\nProcesando pago de S/ {monto:.2f} con tarjeta terminada en {numero_tarjeta[-4:]}...")
+        print("Autorización del banco: APROBADA ✅")
+
+        return True
+    
+####FUNCION PAGAR CON YAPE/PLIN####
+def pagar_con_yape_plin(monto):
+
+    errores = 0
+
+    while True:
+
+        # Número de celular afiliado a Yape (9 dígitos, empieza con 9)
+        celular = input("\nIngrese su número de celular Yape/Plin: ").strip()
+
+        if not re.fullmatch(r"9\d{8}", celular):
+            print("Número inválido ❌. Debe tener 9 dígitos y empezar con 9.")
+            errores += 1
+            if errores >= 3:
+                print("Demasiados intentos ❌")
+                return False
+            continue
+
+        # Se genera el código de confirmación (SIMULACION)
+        codigo_generado = f"{random.randint(0, 9999):04d}"
+
+        print(f"\nSe envió una notificación push a Yape ({celular[:3]}****{celular[-3:]}).")
+        print(f"Código enviado: {codigo_generado}")  
+
+        # Se le pide al usuario que ingrese el codigo enviado a su app de Yape
+        codigo_ingresado = input("Ingrese el código de confirmación de la app (4 dígitos): ").strip()
+
+        if codigo_ingresado != codigo_generado:
+            print("Código inválido ❌.")
+            errores += 1
+            if errores >= 3:
+                print("Demasiados intentos ❌")
+                return False
+            continue
+
+        print(f"\nProcesando pago de S/ {monto:.2f} vía Yape...")
+        print("Pago APROBADO ✅")
+
+        return True
+    
+####FUNCION PAGAR EN EFECTIVO (GENERA RECIBO PARA CAJA)####
+def pagar_con_efectivo(monto, id_mascota, especialidad, fecha, hora):
+
+    # Se genera un código único de 6 dígitos para presentar en caja
+    codigo_pago = f"{random.randint(0, 999999):06d}"
+
+    limpiar_pantalla()
+
+    print("========== RECIBO DE PAGO EN EFECTIVO ==========\n")
+    print(f"Código de pago : {codigo_pago}")
+    print(f"Mascota (ID)    : {id_mascota}")
+    print(f"Especialidad    : {especialidad}")
+    print(f"Fecha / Hora    : {fecha} {hora}")
+    print(f"Monto a pagar   : S/ {monto:.2f}")
+    print("-------------------------------------------------")
+    print("\nPresente este código en caja para completar su pago.")
+    print("Su cita quedará confirmada una vez realizado el pago. ⚠️")
+
+    input("\nPresione Enter para continuar...")
+
+    # Se retorna el código generado para guardarlo en el registro de pago
+    return codigo_pago
+
+
 
 ######################################
 
