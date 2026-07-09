@@ -39,6 +39,9 @@ tabla_usuarios = []
 #Se crea una lista de mascotas para simular una tabla de BD
 tabla_mascotas = []
 
+#Se crea una lista de atenciones para simular una tabla de BD
+tabla_atenciones = []
+
 #Se crea una lista de citas para simular una tabla de BD
 tabla_citas = []
 
@@ -65,6 +68,17 @@ class Mascota:
         self.raza = raza
         self.fecha_nacimiento = fecha_nacimiento
         self.peso = peso_kg
+
+# Se crea la clase atencion
+class Atencion:
+    def __init__(self, id_atencion, id_mascota, diagnostico, tratamiento, precio_soles, fecha, pagado):
+        self.id_atencion = id_atencion
+        self.id_mascota = id_mascota
+        self.diagnostico = diagnostico
+        self.tratamiento = tratamiento
+        self.precio_soles = precio_soles
+        self.fecha = fecha
+        self.pagado = pagado
 
 #Se crea clase cita
 class Cita:
