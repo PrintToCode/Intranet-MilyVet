@@ -39,7 +39,10 @@ tabla_usuarios = []
 #Se crea una lista de mascotas para simular una tabla de BD
 tabla_mascotas = []
 
-#Se crea la clase usuario
+#Se crea una lista de atenciones para simular una tabla de BD
+tabla_atenciones = []
+
+# Se crea la clase usuario
 class Usuario:
     def __init__(self, correo, contrasena, preguntas_respuestas, bloqueado, rol):
         self.correo = correo
@@ -48,7 +51,7 @@ class Usuario:
         self.bloqueado = bloqueado
         self.rol = rol
 
-#Se crea la clase mascota
+# Se crea la clase mascota
 class Mascota:
     def __init__(self, id, correo_dueno, nombre, sexo, especie, raza, fecha_nacimiento, peso_kg):
         self.id = id
@@ -58,7 +61,18 @@ class Mascota:
         self.especie = especie
         self.raza = raza
         self.fecha_nacimiento = fecha_nacimiento
-        self.peso = peso_kg
+        self.peso_kg = peso_kg
+
+# Se crea la clase atencion
+class Atencion:
+    def __init__(self, id_atencion, id_mascota, diagnostico, tratamiento, precio_soles, fecha, pagado):
+        self.id_atencion = id_atencion
+        self.id_mascota = id_mascota
+        self.diagnostico = diagnostico
+        self.tratamiento = tratamiento
+        self.precio_soles = precio_soles
+        self.fecha = fecha
+        self.pagado = pagado
 
 #Se crea un usuario de prueba
 usuario1 = Usuario(
@@ -90,6 +104,20 @@ mascota1 = Mascota(
 
 #Se agrega la mascota creada a la "tabla_mascotas"
 tabla_mascotas.append(mascota1)
+
+#Se crea una atención de prueba
+atencion1 = Atencion(
+    id_atencion = "ATN-001",
+    id_mascota = "CAN-001",
+    diagnostico = "Sobrepeso",
+    tratamiento = "Dieta",
+    precio_soles = "50",
+    fecha = "09/07/2026",
+    pagado = True
+)
+
+#Se agrega la mascota creada a la "tabla_atenciones"
+tabla_atenciones.append(atencion1)
 
 # ╔══════════════════════════════════════════════════════════╗
 # ║                  FIN CONSTRUCCION DE BD                  ║
@@ -154,17 +182,29 @@ def validar_contrasena(contrasena):
         for error in errores:
             print(f"- {error}")
         
-        # Se solicita al usuario que presione la tecla "Enter" para volver a intentarlo ó "X" para retornar al menú inicial
-        opcion = input("\nPresione Enter para volver a interntarlo ó \"X\" para volver al menú inicial...\n ")
+        # Se utiliza un while para validar si el usuario quiere reintentar ingresar el la contraseña
+        while True:
+            # Se espera que el usuario presione R para reintentar o S para salir, elminan los espacios alrededor de la opción ingresada y se convierte a minúscula
+            opcion = input("\nPresione (R) para reintentar ó (S) para salir: ").strip().lower()
 
-    # Si el usuario presiona la tecla "X"
-    if opcion.lower() == "x":
-        # Se retorna el string "inicial"
-        return "inicial"
-    else:
-        # Caso contrario, se retorna el string "reintentar"
-        return "reintentar"
-
+            # Se evalúa la opción ingresada
+            match opcion:
+                # Si es 'r'
+                case 'r':
+                    # Se retorna el valor "reintentar"
+                    return "reintentar"
+                # Si es 's'
+                case 's':
+                    # Se retorna el valor "inicial"
+                    return "inicial"
+                # Si la opción ingresada no es válida
+                case _:
+                    # Se limpia la pantalla
+                    limpiar_pantalla()
+                    # Se imprime el mensaje de error correspondinete
+                    print("\nOpción inválida ❌")
+                    # Se pasa a la siguiente iteración del while que valida la variable 'opcion'
+                    continue
 ##############################
 
 ####FUNCION VALIDAR CORREO####
@@ -180,7 +220,7 @@ def validar_correo(correo_ingresado):
 
             # Se utiliza un while para validar si el usuario quiere reintentar ingresar el correo
             while True:
-                # Se espera que el usuario presione R para continuar o S para salir, elminan los espacios alrededor de la opción ingresada y se convierte a minúscula
+                # Se espera que el usuario presione R para reintentar o S para salir, elminan los espacios alrededor de la opción ingresada y se convierte a minúscula
                 reintentar = input("\nPresione (R) para reintentar ó (S) para salir: ").strip().lower()
 
                 # Se evalúa la opción ingresada
@@ -198,7 +238,7 @@ def validar_correo(correo_ingresado):
                     
                     # Si la opción ingresada no es válida
                     case _:
-                         # Se limpia la pantalla
+                        # Se limpia la pantalla
                         limpiar_pantalla()
                         # Se imprime el mensaje de error correspondinete
                         print("\nOpción inválida ❌")
@@ -214,43 +254,70 @@ def validar_correo(correo_ingresado):
 def generar_id_mascota(especie):
 
     # Se evalua la especie ()
-    match especie.lower():
+    match especie:
 
         # Si es Perro
-        case "perro":
+        case "Perro":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["CAN"] = contador_id.get("CAN", 0) + 1
             # Se retorna el id generado
             return f"CAN-{contador_id["CAN"]:03d}"
         
         # Si es Gato
-        case "gato":
+        case "Gato":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["FEL"] = contador_id.get("FEL", 0) + 1
             # Se retorna el id generado
             return f"FEL-{contador_id["FEL"]:03d}"
         
         # Si es Ave
-        case "ave":
+        case "Ave":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["AVE"] = contador_id.get("AVE", 0) + 1
             # Se retorna el id generado
             return f"AVE-{contador_id["AVE"]:03d}"
         
         # Si es Conejo
-        case "conejo":
+        case "Conejo":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["CON"] = contador_id.get("CON", 0) + 1
             # Se retorna el id generado
             return f"CON-{contador_id["CON"]:03d}"
         
         # Si es Otro
-        case _:
+        case "Otro":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["OTR"] = contador_id.get("OTR", 0) + 1
             # Se retorna el id generado
             return f"OTR-{contador_id["OTR"]:03d}"
 ##################################
+
+####FUNCION RESUMEN DEL DIA####
+def resumen_dia():
+
+    # Se obtiene la fecha actual
+    fecha_actual = datetime.now().date().strftime("%d/%m/%Y")
+
+    # Se inicializa el contador "total_atenciones"
+    total_atenciones = 0
+
+    # Se inicializa el acumulador "total_ingresos"
+    total_ingresos = 0
+
+    # Se recorren todas las atenciones de la lista "tabla_atenciones"
+    for atencion in tabla_atenciones:
+        # Si la atención fue realizada en "fecha_actual"
+        if atencion.fecha == fecha_actual:
+            # Se incrementa en 1 el contador "total_atenciones"
+            total_atenciones += 1
+            # Si la atención está pagada (true)
+            if atencion.pagado:
+                # Se acumula el precio en la variable "total_ingresos"
+                total_ingresos += float(atencion.precio_soles)
+    
+    # Se retorna el total de atenciones y el total de ingresos
+    return total_atenciones, total_ingresos
+###############################
 
 # ╔══════════════════════════════════════════════════════════╗
 # ║                  FIN FUNCIONES DE APOYO                  ║
@@ -368,7 +435,7 @@ def iniciar_sesion():
                 # Se imprime el mensaje correspondiente
                 print("\n¡La cuenta se encuentra bloqueada! ❌")
 
-                # Se espera que el usuario presione enter para continuar
+                # Se espera que el usuario presione cualquier tecla para continuar
                 input("\nPresione cualquier tecla para continuar...")
 
                 # Se retorna el Menú Inicial
@@ -388,7 +455,7 @@ def iniciar_sesion():
                         # Se muestra el mensaje de éxito respectivo
                         print("\nInicio de Sesión Correcto ✅")
 
-                        # Se espera que el usuario presione enter para continuar
+                        # Se espera que el usuario presione cualquier tecla para continuar
                         input("\nPresione cualquier tecla para continuar...")
 
                         # Se ejecuta la función menu_sistema y se envía como parámetro el correo ingresado
@@ -408,7 +475,7 @@ def iniciar_sesion():
                 # Se imprime el mensaje correspondiente
                 print("\n¡Se bloqueó la cuenta! ❌")
 
-                # Se espera que el usuario presione enter para continuar
+                # Se espera que el usuario presione cualquier tecla para continuar
                 input("\nPresione cualquier tecla para continuar...")
 
                 # Se retorna el Menú Inicial
@@ -417,7 +484,7 @@ def iniciar_sesion():
     # Si no se encuenra el correo ingresado, se imprime el mensaje correspondiente
     print("\n¡No se encontró el correo ingresado! ❌")
 
-    # Se espera que el usuario presione enter para continuar
+    # Se espera que el usuario presione cualquier tecla para continuar
     input("\nPresione cualquier tecla para continuar...")
         
 ##############################
@@ -508,7 +575,7 @@ def nuevo_usuario():
     # Se imprime mensaje de confirmación
     print("\n¡Usuario creado de manera exitosa! ✅")
 
-    # Se espera que el usuario presione enter para continuar
+    # Se espera que el usuario presione cualquier tecla para continuar
     input("\nPresione cualquier tecla para continuar...")
 ####################################
 
@@ -627,7 +694,7 @@ def menu_sistema(correo_usuario):
         print("1. Registrar Mascota")
         print("2. Registrar Cita")
         print("3. Cambiar Contraseña")
-        print("4. Registrar Atención")
+        print("4. Registrar Atención (VETERINARIO)")
         print("5. Pagar cita")
         print("6. Cerrar Sesión")
 
@@ -665,7 +732,8 @@ def menu_sistema(correo_usuario):
                 # Se limpia la pantalla
                 limpiar_pantalla()
 
-                print("Ha seleccionado la opción 4")
+                # Se ejecuta función registrar_atencion
+                registrar_atencion(correo_usuario)
 
             # PAGAR CITA
             case 5:
@@ -682,7 +750,7 @@ def menu_sistema(correo_usuario):
                 # Se imprime mensaje de despedida
                 print("¡Sesión Cerrada con Éxito! ✅\n")
 
-                # Se espera que el usuario presione enter para continuar
+                # Se espera que el usuario presione cualquier tecla para continuar
                 input("Presione cualquier tecla para continuar...")
 
                 # Se sale del bucle
@@ -720,7 +788,7 @@ def registrar_mascota(correo):
     while True:
 
         # Se ingresa el nombre de la mascota
-        nombre = input("Ingrese nombre de la mascota: ")
+        nombre = input("Ingrese nombre de la mascota: ").strip().capitalize()
 
         # Se ingresa el sexo de la mascota
         while True:
@@ -801,7 +869,7 @@ def registrar_mascota(correo):
                     if validar_errores(): return
 
         # Se ingresa la raza de la mascota
-        raza = input("Ingrese raza: ")
+        raza = input("Ingrese raza: ").strip().capitalize()
 
         # Se ingresa la fecha de nacimiento de la mascota
         while True:
@@ -870,11 +938,40 @@ def registrar_mascota(correo):
             peso_kg = peso_kg
         )
 
-        # Se agrega la nueva mascota al arreglo tabla_mascotas
-        tabla_mascotas.append(mascota_nueva)
+        # Se muestra el resumen de la nueva mascota
+        print("####RESUMEN DE NUEVA MASCOTA####")
+        print(f"\nID-Mascota: {mascota_nueva.id}")
+        print(f"\nCorreo Dueño: {mascota_nueva.correo_dueno}")
+        print(f"\nNombre de Mascota: {mascota_nueva.nombre}")
+        print(f"\nSexo: {mascota_nueva.sexo}")
+        print(f"\nEspecie: {mascota_nueva.especie}")
+        print(f"\nRaza: {mascota_nueva.raza}")
+        print(f"\nFecha de Nacimiento: {mascota_nueva.fecha_nacimiento}")
+        print(f"\nPeso: {mascota_nueva.peso_kg} Kg")
 
-        # Se imprime mensaje de confirmación
-        print("\n¡Mascota registrada con éxito! ✅")
+        # Se usa un while para validar la variable "confirmar"
+        while True:
+            # Se solicita al usuario indicar si los datos de su mascota son correctos
+            confirmar = input("\n¿Los datos de la mascota son correctos? Sí(S) No(N): ").strip().lower()
+
+            # Se evalua el valor de la variable "confirmar"
+            match confirmar:
+                
+                # Si el valor es 's'
+                case 's':
+                    # Se agrega la nueva mascota al arreglo tabla_mascotas
+                    tabla_mascotas.append(mascota_nueva)
+
+                    # Se imprime mensaje de confirmación
+                    print("\n¡Mascota registrada con éxito! ✅")
+
+                    # Se sale del while que valida la variable "confirmar"
+                    break
+
+                # Si el valor es 'n'
+                case 'n':
+                    limpiar_pantalla()
+                    continue
 
         # while de validación para variable "nuevo_registro"
         while True:
@@ -885,21 +982,32 @@ def registrar_mascota(correo):
             # Se evalua el valor ingresado
             match nuevo_registro:
 
-                # Si el valor ingresado es "S", se sale del while de validación y se vuelve a repetir el proceso
+                # Si el valor ingresado es "S"
                 case "S":
+                    # Se limpia la pantalla
+                    limpiar_pantalla()
+                    # La variable "errores" se establece en 0
                     errores = 0
+                    # Se sale del while de validación y se vuelve a repetir el proceso
                     break
                 
-                # Si el valor ingresado es "N", se sale de la función registrar_mascota y se retorna el menú del sistema
+                # Si el valor ingresado es "N"
                 case "N":
+                    # La variable "errores" se establece en 0
                     errores = 0
+                     # Se sale del while de validación y se vuelve a repetir el proceso
                     return
 
-                # Si el valor ingresado no es "S" ni "N", se muestra el mensaje de error respectivo y se vuelve a solicitar el valor
+                # Si el valor ingresado no es "S" ni "N"
                 case _:
+                    # Se muestra el mensaje de error correspondiente
                     print("Valor ingresado inválido ❌")
 
+                    # Se valida que la cantidad de errores sea menor o igual a 3
                     if validar_errores(): return
+
+                    # Se vuelve a solicitar el valor
+                    continue
 #################################
 
 ####2.2.FUNCION REGISTRAR CITA####
@@ -952,13 +1060,297 @@ def cambiar_contrasena(correo_usuario):
 ####2.4.FUNCION REGISTRAR ATENCIÓN####
 
 #Daniel y Luis aquí su código :)
+def registrar_atencion(correo_usuario):
 
+    # Se busca el correo del usuario en la "tabla_usuarios"
+    for user in tabla_usuarios:
+        # Cuando se encuentra al objeto corespondiente
+        if user.correo == correo_usuario:
+
+            # Si el usuario tiene acceso al módulo
+            if user.rol == "VET":
+
+                # while para validar si el Veterinario desea atender otra mascota
+                while True:
+
+                    # Se inicializa el valor de la variable "encontrado" como False
+                    encontrado = False
+
+                    # Se solicita ingresar el ID de la mascota:
+                    id_mascota = input("Ingrese el ID de la mascota: ").strip().upper()
+
+                    # Se busca el ID de mascota en la "tabla_mascotas"
+                    for mascota in tabla_mascotas:
+                        # Si se encuentra la mascota con el ID ingresado
+                        if mascota.id == id_mascota:
+
+                            # Si se encuentra a la mascota, entonces el valor de la variable "encontrado" se pone como True
+                            encontrado = True
+                            
+                            # Se utiliza un while para confirmar la atención
+                            while True:
+
+                                # Se limpia la pantalla
+                                limpiar_pantalla()
+
+                                # Se muestran los datos de la mascota encontrada
+                                print("####DATOS DE LA MASCOTA###")
+                                print(f"\nID-Mascota: {mascota.id}")
+                                print(f"\nCorreo Dueño: {mascota.correo_dueno}")
+                                print(f"\nNombre de Mascota: {mascota.nombre}")
+                                print(f"\nSexo: {mascota.sexo}")
+                                print(f"\nEspecie: {mascota.especie}")
+                                print(f"\nRaza: {mascota.raza}")
+                                print(f"\nFecha de Nacimiento: {mascota.fecha_nacimiento}")
+                                print(f"\nPeso: {mascota.peso_kg} Kg")
+
+                                # Se usa un while para validar la variable "diagnostico"
+                                while True:
+                                    # Se pide al Veterinario ingresar el diagnóstico
+                                    diagnostico = input("\nDiagnóstico (min. 20 caracteres): ")
+
+                                    # Si el diagnóstico ingresado es menor de 20 caracteres
+                                    if len(diagnostico) < 20:
+                                        # Se imprime el mensaje de error correspondiente
+                                        print("El campo Diagnóstico debe tener una longitud mínima de 20 caracteres ❌")
+                                        # Se continua con la siguiente iteración del while que valida la variable "diagnostico"
+                                        continue
+                                    # Si el diagnóstico ingresado es mayor o igual a 20 caracteres
+                                    else:
+                                        # Se sale del while que valida la variable "diagnostico"
+                                        break
+
+                                # Se usa un while para validar la variable "tratamiento"
+                                while True:
+                                    # Se pide al Veterinario ingresar el tratamiento
+                                    tratamiento = input("\nTratamiento (min. 20 caracteres): ")
+
+                                    # Si el tratamiento ingresado es menor de 20 caracteres
+                                    if len(tratamiento) < 20:
+                                        # Se imprime el mensaje de error correspondiente
+                                        print("El campo Tratamiento debe tener una longitud mínima de 20 caracteres ❌")
+                                        # Se continua con la siguiente iteración del while que valida la variable "tratamiento"
+                                        continue
+                                    # Si el tratamiento ingresado es mayor o igual a 20 caracteres
+                                    else:
+                                        # Se sale del while que valida la variable "tratamiento"
+                                        break
+                                
+                                # Se usa un while para validar la variable "precio_soles"
+                                while True:
+
+                                    # Se valida que el precio ingresado cumple con el formato float
+                                    try:
+                                        # Se pide al Veterinario ingresar el precio en soles
+                                        precio_soles = float(input("\nPrecio S/: ").strip())
+
+                                        # Si el precio ingresado es menor o igual a cero
+                                        if precio_soles <= 0:
+                                            # Se imprime el mensaje de error correspondiente
+                                            print("El precio debe ser mayor a 0 ❌.")
+                                            # Se continua con la siguiente iteración del while que valida la variable "precio_soles"
+                                            continue
+                                        # Si el precio ingresado es mayor a cero
+                                        else:
+                                            # Se guarda el preciuo ingresado como string en formato de 2 decimales
+                                            precio_soles = f"{precio_soles:.2f}"
+                                            # Se sale del while que valida la variable "precio_soles"
+                                            break
+                                    
+                                    # Si el precio ingresado no cumple con el formato float
+                                    except ValueError:
+                                        # Se imprime el mensaje de error correspondiente
+                                        print("Ingrese un precio válido (Ej: 50.70) ❌.")
+                                        # Se continua con la siguiente iteración del while que valida la variable "precio_soles"
+                                        continue
+                                
+                                # Si la lista "tabla_atenciones" tiene registros
+                                if tabla_atenciones:
+                                    # Se obtienen el ID de la última atención
+                                    id_ultima_atencion = tabla_atenciones[-1].id_atencion
+                                    # Se obtiene el número asociado a la última atención
+                                    num_ultima_atencion = int(id_ultima_atencion.split("-")[-1])
+                                    # El número de la nueva atención será 1 más que el número de la última atención
+                                    num_nueva_atencion = num_ultima_atencion + 1
+                                 #Si la lista "tabla_atenciones" no tiene registros
+                                else:
+                                    # El número de la nueva atención será 1
+                                    num_nueva_atencion = 1
+                                
+                                # El id de la nueva atención se forma con el prefijo ATN- y el número de la nueva atención con formado 03d
+                                id_nueva_atencion = f"ATN-{num_nueva_atencion:03d}"
+
+                                # Se crea el objeto "nueva_atencion"
+                                nueva_atencion = Atencion(
+                                    id_atencion = id_nueva_atencion,
+                                    id_mascota = id_mascota,
+                                    diagnostico = diagnostico,
+                                    tratamiento = tratamiento,
+                                    precio_soles = precio_soles,
+                                    fecha = datetime.now().date().strftime("%d/%m/%Y"),
+                                    pagado = False
+                                )
+
+                                # Se limpia la pantalla
+                                limpiar_pantalla()
+
+                                # Se muestra el resumen de la atención
+                                print("####RESUMEN DE ATENCIÓN###")
+                                print(f"\nID-Atencion: {nueva_atencion.id_atencion}")
+                                print(f"\nID-Mascota: {mascota.id}")
+                                print(f"\nCorreo Dueño: {mascota.correo_dueno}")
+                                print(f"\nNombre de Mascota: {mascota.nombre}")
+                                print(f"\nSexo: {mascota.sexo}")
+                                print(f"\nEspecie: {mascota.especie}")
+                                print(f"\nRaza: {mascota.raza}")
+                                print(f"\nFecha de Nacimiento: {mascota.fecha_nacimiento}")
+                                print(f"\nPeso: {mascota.peso_kg} Kg")
+                                print(f"\nDiagnóstico: {diagnostico}")
+                                print(f"\nTratamiento: {tratamiento}")
+                                print(f"\nPrecio: S/{precio_soles}")
+
+                                # Se usa un while para validar la variable "confirmar_atencion"
+                                while True:
+                                    # Se solicita al usuario confirmar la atención
+                                    confirmar_atencion = input("\n¿Confirmar Atención? Si(S) No(N): ").strip().lower()
+
+                                    # Si el valor de la variable "confirmar_atencion" es diferente a "s" y "n"
+                                    if confirmar_atencion != 's' and confirmar_atencion != 'n':
+                                        # Se imprime el mensaje de error correspondinete
+                                        print("\nOpción inválida ❌")
+                                        # Se pasa a la siguiente iteración del while que valida la variable "confirmar_atencion"
+                                        continue
+                                    # Si el valor de la variable "confirmar_atencion" es "s" ó "n"
+                                    else:
+                                        # Se sale del while que valida la variable "confirmar_atencion"
+                                        break
+                                
+                                # Se evalúa el valor de la vatiable "confirmar_atencion"
+                                match confirmar_atencion:
+                                    # Si el valor de la variable es "s"
+                                    case 's':
+                                        # Se sale del while que se utiliza para confirmar la atención (no se vuelve a solicitar diagnóstico, tratamiento y precio)
+                                        break
+                                    # Si el valor de la variable es "n"
+                                    case 'n':
+                                        # Se limpia la pantalla
+                                        limpiar_pantalla()
+                                        # Se continua con la siguiente iteración del while que se utiliza para confirmar la atención (se vuelve a solicitar diagnóstico, tratamiento y precio)
+                                        continue
+
+                            # Se agrega el objeto "nueva_atencion" a la lista "tabla_atenciones"
+                            tabla_atenciones.append(nueva_atencion)
+
+                            # Se muestra el mensaje de éxito correspondiente
+                            print("\n¡Atención registrada exitosamente! ✅")
+
+                            # Se usa un while para validar la variable "pagar_ahora"
+                            while True:
+                                # Se solicita al usuario escoger un a opción
+                                pagar_ahora = input("\n¿Pagar Ahora? Sí(S) No(N): ").strip().lower()
+
+                                # Se evalúa el valor de la variable "pagar_ahora"
+                                match pagar_ahora:
+
+                                    # Si se selecciona 's'
+                                    case 's':
+                                        # Se recorren las atenciones de la lista "tabla_atenciones"
+                                        for atencion in tabla_atenciones:
+                                            # Cuando se encuentra el objeto que tiene el id de la nueva atención
+                                            if atencion.id_atencion == id_nueva_atencion:
+                                                # Se ejecuta el módulo de pagos y se almacena su resultado en la variable "pago_exitoso"
+                                                pago_exitoso = pagar_cita(atencion.precio_soles)
+                                                # Si el pago es exitoso
+                                                if pago_exitoso:
+                                                    # Se actualiza el valor de la propiedad pagado del objeto a True
+                                                    atencion.pagado = True
+                                        # Se sale del while que valida la variables "pagar_ahora"
+                                        break
+
+                                    # Si se selecciona 'n'
+                                    case 'n':
+                                        # Se sale del while que valida la variables "pagar_ahora"
+                                        break
+
+                                    # Si se selecciona otro valor
+                                    case _:
+                                        # Se imprime el mensaje de error correspondinete
+                                        print("\nOpción inválida ❌")
+                                        # Se pasa a la siguiente iteración del while que valida la variable "pagar_ahora"
+                                        continue
+
+                            # Se usa un while para validar la variable "otra_mascota"
+                            while True:
+                                # Se solicita al usuario escoger un a opción
+                                otra_mascota = input("\n¿Atender Otra Mascota? Sí(S) No(N): ").strip().lower()
+
+                                # Si el valor de la variable "otra_mascota" es diferente a "s" y "n"
+                                if otra_mascota != 's' and otra_mascota != 'n':
+                                    # Se imprime el mensaje de error correspondinete
+                                    print("\nOpción inválida ❌")
+                                    # Se pasa a la siguiente iteración del while que valida la variable "otra_mascota"
+                                    continue
+                                # Si el valor de la variable "otra_mascota" es "s" ó "n"
+                                else:
+                                    # Se sale del while que valida la variable "otra_mascota"
+                                    break
+
+                            # Se sale del for de búsqueda del ID de mascota
+                            break
+                    
+                    # Si la variable "encontrado" es True
+                    if encontrado:
+                        # Se evalúa el valor de la vatiable "otra_mascota"
+                        match otra_mascota:
+                            # Si el valor de la variable es "s"
+                            case 's':
+                                # Se limpia la pantalla
+                                limpiar_pantalla()
+                                # Si continua con la siguiente iteración del while que valida si el Veterninario quiere atender otra mascota
+                                continue
+                            # Si el valor de la variable es "n"
+                            case 'n':
+                                # Se calcula el total de atenciones y el total de ingresos del día
+                                total_atenciones, total_ingresos = resumen_dia()
+                                # Se muestra el resumen del día
+                                print("\n####RESUMEN DEL DÍA###")
+                                print(f"\nTotal de Atenciones: {total_atenciones}")
+                                print(f"\nTotal de Ingresos: S/{total_ingresos}")
+
+                                # Se espera que el usuario presione cualquier tecla para continuar
+                                input("\nPresione cualquier tecla para continuar...")
+
+                                # Se retorna al menú del sistema
+                                return
+                    # Si no se encuentra la mascota con el ID ingresado
+                    else:
+                        # se imprime el mensaje de error correspondiente
+                        print("¡Mascota no encontrada en el sistema! ❌")
+
+                        # Se espera que el usuario presione cualquier tecla para continuar
+                        input("\nPresione cualquier tecla para continuar...")
+
+                        # Se retorna al menú del sistema
+                        return
+
+            # Si el usuario no tiene acceso al módulo
+            else:
+                # Se imprime el mensaje de error correspondiente
+                print("¡No tiene acceso al módulo registrar atención! ❌")
+
+                # Se espera que el usuario presione cualquier tecla para continuar
+                input("\nPresione cualquier tecla para continuar...")
+
+                # Se retorna al menú del sistema
+                return
 ######################################
 
 ####2.5.FUNCION PAGAR CITA####
 
 #Daniela y Manuel aquí su código :)
-
+def pagar_cita(precio):
+    print("\n¡Pago exitoso! ✅")
+    return True
 ######################################
 
 # ╔══════════════════════════════════════════════════════════╗
@@ -976,110 +1368,4 @@ menu_inicial()
 
 # ╔══════════════════════════════════════════════════════════╗
 # ║          FIN DEL PROGRAMA                                ║
-# ╚══════════════════════════════════════════════════════════╝
-          
-
-
-
-
-
- 
-
-        
-      
-
-
-
-
-
-
-
-
-
-               
-
-         
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-               
-
-
-    
-
-        
-
-
-      
-
-        
-
-       
-
-     
-
-
-
-
-
-                 
-         
-
-
-
-
-                
-
-
-
-
-
-
-
-
-         
-
-     
-       
-
-
-    
-            
-    
-     
-
-     
-         
-
-    
-        
-
-
-
-    
-
-
-    
-
-
-
-
-
-
-
-
-                    
+# ╚══════════════════════════════════════════════════════════╝             
