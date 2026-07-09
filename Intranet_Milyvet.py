@@ -39,6 +39,12 @@ tabla_usuarios = []
 #Se crea una lista de mascotas para simular una tabla de BD
 tabla_mascotas = []
 
+#Se crea una lista de citas para simular una tabla de BD
+tabla_citas = []
+
+#Se crea una lista de pagos para simular una tabla de BD
+tabla_pagos = []
+
 #Se crea la clase usuario
 class Usuario:
     def __init__(self, correo, contrasena, preguntas_respuestas, bloqueado, rol):
@@ -60,6 +66,31 @@ class Mascota:
         self.fecha_nacimiento = fecha_nacimiento
         self.peso = peso_kg
 
+#Se crea clase cita
+class Cita:
+
+    def __init__(self, id_mascota, medico, especialidad, fecha, hora, estado):
+
+        self.id_mascota = id_mascota
+        self.medico = medico
+        self.especialidad = especialidad
+        self.fecha = fecha
+        self.hora = hora
+        self.estado = estado
+
+#Se crea la clase pagos
+class Pago:
+
+    def __init__(self, id_mascota, medico, fecha, hora, metodo, monto, estado):
+        self.id_mascota = id_mascota
+        self.medico = medico
+        self.fecha = fecha
+        self.hora = hora
+        self.metodo = metodo
+        self.monto = monto
+        self.estado = estado
+        self.codigo_pago = codigo_pago
+
 #Se crea un usuario de prueba
 usuario1 = Usuario(
     correo = "luis.alberca.munive@gmail.com",
@@ -75,6 +106,31 @@ usuario1 = Usuario(
 
 #Se agrega el usuario creado a la "tabla_usuarios"
 tabla_usuarios.append(usuario1)
+
+#Se crea una lista de medicos para simular una tabla de BD
+tabla_medicos = [
+
+    {"nombre":"Dr. Carlos Pérez","especialidad":"Medicina General"},
+    {"nombre":"Dra. Ana Ruiz","especialidad":"Medicina General"},
+
+    {"nombre":"Dr. Luis Gómez","especialidad":"Vacunación"},
+    {"nombre":"Dra. Rosa Torres","especialidad":"Vacunación"},
+
+    {"nombre":"Dr. Miguel Flores","especialidad":"Desparasitación"},
+    {"nombre":"Dra. Ana Mendoza","especialidad":"Desparasitación"},
+
+    {"nombre":"Dr. Javier Ruiz","especialidad":"Cirugía"},
+    {"nombre":"Dra. Claudia León","especialidad":"Cirugía"}
+
+]
+
+#Precios referenciales por especialidad
+precios_especialidad = {
+    "Medicina General": 50.00,
+    "Vacunación": 40.00,
+    "Desparasitación": 35.00,
+    "Cirugía": 200.00
+}
 
 #Se crea una mascota de prueba
 mascota1 = Mascota(
@@ -986,12 +1042,6 @@ def registrar_cita(correo_usuario):
         print(f"Raza: {mascota_seleccionada.raza}")
         print()
 
-        tabla_medicos = [
-    {"nombre":"Dr. Carlos Pérez","especialidad":"Medicina General"},
-    {"nombre":"Dra. Ana Ruiz","especialidad":"Vacunación"},
-    {"nombre":"Dr. Luis Gómez","especialidad":"Desparasitación"},
-    {"nombre":"Dra. María Torres","especialidad":"Cirugía"}
-]
         
         #============================
         # SELECCIONAR ESPECIALIDAD
