@@ -18,6 +18,9 @@ import re
 # Importar la clase datetime (módulo datetime) para validar la fecha de nacimiento de las mascotas
 from datetime import datetime
 
+# Importar módulo radom para generar código de pago
+import random
+
 # ╔══════════════════════════════════════════════════════════╗
 # ║                  FIN IMPORTAR LIBRERIAS                  ║
 # ╚══════════════════════════════════════════════════════════╝
@@ -67,7 +70,7 @@ class Mascota:
         self.especie = especie
         self.raza = raza
         self.fecha_nacimiento = fecha_nacimiento
-        self.peso = peso_kg
+        self.peso_kg = peso_kg
 
 # Se crea la clase atencion
 class Atencion:
@@ -95,7 +98,7 @@ class Cita:
 #Se crea la clase pagos
 class Pago:
 
-    def __init__(self, id_mascota, medico, fecha, hora, metodo, monto, estado):
+    def __init__(self, id_mascota, medico, fecha, hora, metodo, monto, estado, codigo_pago):
         self.id_mascota = id_mascota
         self.medico = medico
         self.fecha = fecha
@@ -103,7 +106,7 @@ class Pago:
         self.metodo = metodo
         self.monto = monto
         self.estado = estado
-        self.codigo_pago = self.codigo_pago
+        self.codigo_pago = codigo_pago
 
 #Se crea un usuario de prueba
 usuario1 = Usuario(
@@ -773,7 +776,8 @@ def menu_sistema(correo_usuario):
                 # Se limpia la pantalla
                 limpiar_pantalla()
 
-                print("Ha seleccionado la opción 2")
+                # Se ejecuta función registrar_cita
+                registrar_cita(correo_usuario)
 
             # CAMBIAR CONTRASEÑA
             case 3:
@@ -796,7 +800,8 @@ def menu_sistema(correo_usuario):
                 # Se limpia la pantalla
                 limpiar_pantalla()
 
-                print("Ha seleccionado la opción 5")
+                # Se ejecuta función pagar_cita
+                pagar_cita(correo_usuario)
 
             # SALIR
             case _:
@@ -1857,6 +1862,7 @@ def pagar_cita(correo_usuario):
              else:
                 estado_cita = "Pagado"             # Tarjeta/Yape/Plin se confirman al instante
                 estado_pago = "Completado"
+                codigo_pago = "" 
 
              cita_seleccionada.estado = estado_cita
 
@@ -1900,12 +1906,14 @@ def pagar_cita(correo_usuario):
                 case _:
                     print("Opción inválida ❌")
                     if validar_errores(): return
+##################################################
 
 ####FUNCION PAGAR CON TARJETA ####
 def pagar_con_tarjeta(monto):
 
     errores = 0
 
+    # Validación de variable "numero_tarjeta"
     while True:
 
         # Número de tarjeta: se valida que tenga 16 dígitos numéricos
@@ -1918,12 +1926,33 @@ def pagar_con_tarjeta(monto):
                 print("Demasiados intentos ❌")
                 return False
             continue
+        # Se restablece la variable "errores"
+        errores = 0
+        # Se sale del while de validación
+        break
+    
+    # Validación de variable "vencimiento"
+    while True:
 
         # Fecha de vencimiento en formato MM/AA
         vencimiento = input("Ingrese fecha de vencimiento (MM/AA): ").strip()
 
         try:
             fecha_venc = datetime.strptime(vencimiento, "%m/%y")
+
+            if fecha_venc.date() < datetime.now().date():
+
+                print("La fecha de vencimiento no puede ser pasada ❌")
+                errores += 1
+                if errores >= 3:
+                    print("Demasiados intentos ❌")
+                    return False
+                continue
+            # Se restablece la variable "errores"
+            errores = 0
+            # Se sale del while de validación
+            break
+
         except ValueError:
             print("Formato de fecha inválido ❌. Use MM/AA (Ejemplo: 09/27).")
             errores += 1
@@ -1932,6 +1961,8 @@ def pagar_con_tarjeta(monto):
                 return False
             continue
 
+    # Validación de variable "cvv"
+    while True:
         # CVV oculto con getpass, se valida que tenga 3 dígitos
         cvv = getpass.getpass("Ingrese CVV (3 dígitos): ").strip()
 
@@ -1942,18 +1973,24 @@ def pagar_con_tarjeta(monto):
                 print("Demasiados intentos ❌")
                 return False
             continue
+        # Se restablece la variable "errores"
+        errores = 0
+        # Se sale del while de validación
+        break
 
-        # Simulación de autorización del banco (siempre aprobado en esta versión de práctica)
-        print(f"\nProcesando pago de S/ {monto:.2f} con tarjeta terminada en {numero_tarjeta[-4:]}...")
-        print("Autorización del banco: APROBADA ✅")
+    # Simulación de autorización del banco (siempre aprobado en esta versión de práctica)
+    print(f"\nProcesando pago de S/ {monto:.2f} con tarjeta terminada en {numero_tarjeta[-4:]}...")
+    print("Autorización del banco: APROBADA ✅")
 
-        return True
+    return True
+##################################
     
 ####FUNCION PAGAR CON YAPE/PLIN####
 def pagar_con_yape_plin(monto):
 
     errores = 0
 
+    # Validación de variable "celular"
     while True:
 
         # Número de celular afiliado a Yape (9 dígitos, empieza con 9)
@@ -1966,7 +2003,11 @@ def pagar_con_yape_plin(monto):
                 print("Demasiados intentos ❌")
                 return False
             continue
-
+        # Se sale del while de validación
+        break
+    
+    # Validación de variable "codigo_generado"
+    while True:
         # Se genera el código de confirmación (SIMULACION)
         codigo_generado = f"{random.randint(0, 9999):04d}"
 
@@ -1983,12 +2024,15 @@ def pagar_con_yape_plin(monto):
                 print("Demasiados intentos ❌")
                 return False
             continue
+        # Se sale del while de validación
+        break
 
-        print(f"\nProcesando pago de S/ {monto:.2f} vía Yape...")
-        print("Pago APROBADO ✅")
+    print(f"\nProcesando pago de S/ {monto:.2f} vía Yape...")
+    print("Pago APROBADO ✅")
 
-        return True
-    
+    return True
+###################################
+ 
 ####FUNCION PAGAR EN EFECTIVO (GENERA RECIBO PARA CAJA)####
 def pagar_con_efectivo(monto, id_mascota, especialidad, fecha, hora):
 
@@ -2011,9 +2055,6 @@ def pagar_con_efectivo(monto, id_mascota, especialidad, fecha, hora):
 
     # Se retorna el código generado para guardarlo en el registro de pago
     return codigo_pago
-
-
-
 ######################################
 
 # ╔══════════════════════════════════════════════════════════╗
