@@ -312,43 +312,85 @@ def validar_correo(correo_ingresado):
 ####FUNCION GENERAR ID MASCOTA####
 def generar_id_mascota(especie):
 
-    # Se evalua la especie ()
+    # Se evalua la especie
+    match especie:
+
+        # Si es Perro
+        case "Perro":
+            # Se genera el nuevo número de mascota
+            nuevo_numero_mascota = contador_id.get("CAN", 0) + 1
+            # Se retorna el id generado
+            return f"CAN-{nuevo_numero_mascota:03d}"
+        
+        # Si es Gato
+        case "Gato":
+            # Se genera el nuevo número de mascota
+            nuevo_numero_mascota = contador_id.get("FEL", 0) + 1
+            # Se retorna el id generado
+            return f"FEL-{nuevo_numero_mascota:03d}"
+        
+        # Si es Ave
+        case "Ave":
+            # Se genera el nuevo número de mascota
+            nuevo_numero_mascota = contador_id.get("AVE", 0) + 1
+            # Se retorna el id generado
+            return f"AVE-{nuevo_numero_mascota:03d}"
+        
+        # Si es Conejo
+        case "Conejo":
+            # Se genera el nuevo número de mascota
+            nuevo_numero_mascota = contador_id.get("CON", 0) + 1
+            # Se retorna el id generado
+            return f"CON-{nuevo_numero_mascota:03d}"
+        
+        # Si es Otro
+        case "Otro":
+            # Se genera el nuevo número de mascota
+            nuevo_numero_mascota = contador_id.get("OTR", 0) + 1
+            # Se retorna el id generado
+            return f"OTR-{nuevo_numero_mascota:03d}"
+##################################
+
+####FUNCION ACTUALIZAR CONTADOR ID####
+def actualizar_contador_id(especie):
+
+    # Se evalua la especie
     match especie:
 
         # Si es Perro
         case "Perro":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["CAN"] = contador_id.get("CAN", 0) + 1
-            # Se retorna el id generado
-            return f"CAN-{contador_id["CAN"]:03d}"
+            # Se termina la función
+            return
         
         # Si es Gato
         case "Gato":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["FEL"] = contador_id.get("FEL", 0) + 1
-            # Se retorna el id generado
-            return f"FEL-{contador_id["FEL"]:03d}"
+            # Se termina la función
+            return
         
         # Si es Ave
         case "Ave":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["AVE"] = contador_id.get("AVE", 0) + 1
-            # Se retorna el id generado
-            return f"AVE-{contador_id["AVE"]:03d}"
+            # Se termina la función
+            return
         
         # Si es Conejo
         case "Conejo":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["CON"] = contador_id.get("CON", 0) + 1
-            # Se retorna el id generado
-            return f"CON-{contador_id["CON"]:03d}"
+            # Se termina la función
+            return
         
         # Si es Otro
         case "Otro":
             # Se actualiza el número de la especie en el diccionario contador_id
             contador_id["OTR"] = contador_id.get("OTR", 0) + 1
-            # Se retorna el id generado
-            return f"OTR-{contador_id["OTR"]:03d}"
+            # Se termina la función
+            return
 ##################################
 
 ####FUNCION RESUMEN DEL DIA####
@@ -845,7 +887,7 @@ def registrar_mascota(correo):
             # Retorna False
             return False
 
-
+    # Se utiliza un while para introducir los datos de la mascota
     while True:
 
         # Se ingresa el nombre de la mascota
@@ -999,6 +1041,9 @@ def registrar_mascota(correo):
             peso_kg = peso_kg
         )
 
+        # Se limpia la pantalla
+        limpiar_pantalla()
+
         # Se muestra el resumen de la nueva mascota
         print("####RESUMEN DE NUEVA MASCOTA####")
         print(f"\nID-Mascota: {mascota_nueva.id}")
@@ -1023,6 +1068,9 @@ def registrar_mascota(correo):
                     # Se agrega la nueva mascota al arreglo tabla_mascotas
                     tabla_mascotas.append(mascota_nueva)
 
+                    # Se actualiza el diccionario "contador_id"
+                    actualizar_contador_id(especie)
+
                     # Se imprime mensaje de confirmación
                     print("\n¡Mascota registrada con éxito! ✅")
 
@@ -1031,8 +1079,27 @@ def registrar_mascota(correo):
 
                 # Si el valor es 'n'
                 case 'n':
+                    # Se limpia la pantalla
                     limpiar_pantalla()
+
+                    # Se sale del while que valida la variable "confirmar"
+                    break
+
+                case _:
+                    # Se muestra el mensaje de error correspondiente
+                    print("Valor ingresado inválido ❌")
+
+                    # Se valida que la cantidad de errores sea menor o igual a 3
+                    if validar_errores(): return
+
+                    # Se vuelve a solicitar el valor
                     continue
+
+        
+        # Si el valor de la variable "confirmar" en 'n'
+        if confirmar == 'n':
+            # Se continua con la siguiente iteración del while que solicita los datos de la mascota
+            continue
 
         # while de validación para variable "nuevo_registro"
         while True:
