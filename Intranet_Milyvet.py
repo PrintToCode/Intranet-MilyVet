@@ -91,19 +91,17 @@ class Atencion:
 
 #Se crea clase cita
 class Cita:
-
-    def __init__(self, id_mascota, medico, especialidad, fecha, hora, estado):
-
+    def __init__(self, id_mascota, medico, especialidad, fecha, hora, estado, atendido):
         self.id_mascota = id_mascota
         self.medico = medico
         self.especialidad = especialidad
         self.fecha = fecha
         self.hora = hora
         self.estado = estado
+        self.atendido = atendido
 
 #Se crea la clase pagos
 class Pago:
-
     def __init__(self, id_mascota, medico, fecha, hora, metodo, monto, estado, codigo_pago):
         self.id_mascota = id_mascota
         self.medico = medico
@@ -453,28 +451,42 @@ def generar_id_atencion():
 def menu_inicial():
     while True:
 
-        #Se limpia la pantalla
-        limpiar_pantalla()
-        
-        #Se muestra el Menú Inicial
-        print(r"""
-    /\_/\        __  ____ ___ _    __     __       / \__ 
-    ( o.o )      /  |/  (_) (_) |  / /__  / /_     (    @\_
-    > ^ <      / /|_/ / / / /| | / / _ \/ __/     /       O
-                / /  / / / / / | |/ /  __/ /_      /   (____/
-            /_/  /_/_/_/_/  |___/\___/\__/      /___/  U  
-    """)
-        print("====MENU INICIAL - MilyVet====")
-        print("1. Iniciar Sesion")
-        print("2. Nuevo Usuario")
-        print("3. Recuperar Contraseña")
-        print("4. Salir")
+        # Se usa un while para validar la opción ingresada
+        while True:
+            #Se limpia la pantalla
+            limpiar_pantalla()
+            
+            #Se muestra el Menú Inicial
+            print(r"""
+        /\_/\        __  ____ ___ _    __     __       / \__ 
+        ( o.o )      /  |/  (_) (_) |  / /__  / /_     (    @\_
+        > ^ <      / /|_/ / / / /| | / / _ \/ __/     /       O
+                    / /  / / / / / | |/ /  __/ /_      /   (____/
+                /_/  /_/_/_/_/  |___/\___/\__/      /___/  U  
+        """)
+            print("====MENU INICIAL - MilyVet====")
+            print("1. Iniciar Sesion")
+            print("2. Nuevo Usuario")
+            print("3. Recuperar Contraseña")
+            print("4. Salir")
 
-        #Se pide al usuario que ingrese una opción
-        main_option = int(input("Ingrese una opción: "))
+            try:
+                #Se pide al usuario que ingrese una opción
+                opcion = int(input("\nIngrese una opción: "))
+
+                if 1 <= opcion <= 4:
+                    break
+                else:
+                    print("\nIngrese una opción válida ❌")
+                    input("\nPresione cualquier tecla para continuar...")
+                    continue
+            except ValueError:
+                print("\nIngrese una opción válida ❌")
+                input("\nPresione cualquier tecla para continuar...")
+                continue
 
         #Se evalúa la opción ingresada en el menú inicial
-        match main_option:
+        match opcion:
 
             #INICIAR SESION
             case 1:
@@ -803,23 +815,45 @@ def recuperar_contrasena():
 
 ####2.FUNCION MENU DEL SISTEMA####
 def menu_sistema(correo_usuario):
-
     while True:
 
-        # Se limpia la pantalla
-        limpiar_pantalla()
+        # Se usa un while para validar la opción ingresada
+        while True:
+            # Se limpia la pantalla
+            limpiar_pantalla()
 
-        # Se muestra el Menú del Sistema
-        print("====MENU DEL SISTEMA - MilyVet====")
-        print("1. Registrar Mascota")
-        print("2. Registrar Cita")
-        print("3. Cambiar Contraseña")
-        print("4. Registrar Atención (VETERINARIO)")
-        print("5. Pagar cita")
-        print("6. Cerrar Sesión")
+            # Se muestra el Menú del Sistema
+            print(r"""
+    +--------------------------------------------------+
+    |                                                   |
+    |                 *** BIENVENIDO ***                |
+    |                                                   |
+    |                 INTRANET MILYVET  🐾              |
+    |                                                   |
+    +--------------------------------------------------+
+        """)
+            print("====MENU DEL SISTEMA - MilyVet====")
+            print("1. Registrar Mascota")
+            print("2. Registrar Cita")
+            print("3. Cambiar Contraseña")
+            print("4. Registrar Atención (VETERINARIO)")
+            print("5. Pagar cita")
+            print("6. Cerrar Sesión")
 
-        # Se pide al usuario que ingrese una opción
-        opcion = int(input("Ingrese una opción: "))
+            try:
+                # Se pide al usuario que ingrese una opción
+                opcion = int(input("\nIngrese una opción: "))
+
+                if 1 <= opcion <= 6:
+                    break
+                else:
+                    print("\nIngrese una opción válida ❌")
+                    input("\nPresione cualquier tecla para continuar...")
+                    continue
+            except ValueError:
+                print("\nIngrese una opción válida ❌")
+                input("\nPresione cualquier tecla para continuar...")
+                continue
 
         # Se evalúa la opción ingresada en el Menú del Sistema
         match opcion:
@@ -862,7 +896,7 @@ def menu_sistema(correo_usuario):
                 limpiar_pantalla()
 
                 # Se ejecuta función pagar_cita
-                pagar_cita(correo_usuario)
+                pagar_cita(correo_usuario = correo_usuario)
 
             # SALIR
             case _:
@@ -891,8 +925,8 @@ def registrar_mascota(correo):
         # Se incrementa el contador de errores
         errores += 1
 
-        # Si el contador de errores es mayor a 3
-        if errores > 3:
+        # Si el contador de errores es mayor ó igual a 3
+        if errores >= 3:
             # Se muetra el mensaje de error respectivo
             print("Demasiados intentos ❌")
 
@@ -1447,7 +1481,8 @@ def registrar_cita(correo_usuario):
                         especialidad,
                         fecha,
                         hora,
-                        "Pendiente"
+                        "Pendiente",
+                        False
                     )
 
                     tabla_citas.append(nueva_cita)
@@ -1556,8 +1591,8 @@ def registrar_atencion(correo):
         # Se incrementa el contador de errores
         errores += 1
 
-        # Si el contador de errores es mayor a 3
-        if errores > 3:
+        # Si el contador de errores es mayor ó igual a 3
+        if errores >= 3:
             # Se muestra el mensaje de error correspondiente
             print("Demasiados intentos ❌")
 
@@ -1612,10 +1647,10 @@ def registrar_atencion(correo):
                 continue
 
             # Se busca si la mascota ingresada tiene citas agendadas (la fecha y hora de la cita debe ser mayor a la fecha y hora actual - Las citas pasadas no se muestran)
-            citas_mascota = [c for c in tabla_citas if (c.id_mascota == id_mascota and datetime.strptime(f"{c.fecha} {c.hora}", "%d/%m/%Y %H:%M") >= datetime.now())]
+            citas_mascota = [c for c in tabla_citas if (c.id_mascota == id_mascota and datetime.strptime(f"{c.fecha} {c.hora}", "%d/%m/%Y %H:%M") >= datetime.now() and c.atendido == False)]
 
             # Si la mascota no tiene citas agendadas, se muestra el mensaje de error correspondiente
-            if citas_mascota is None:
+            if not citas_mascota:
                 # Se muestra el mensaje de error correspondiente
                 print("La mascota no tiene citas agendadas ❌")
 
@@ -1666,31 +1701,31 @@ def registrar_atencion(correo):
                         # Se imprime el mensaje de advertencia correspondiente
                         print("\nPrimero debe pagar la cita antes de atenderla ⚠️")
 
-                        # Se usa una while para validar la variable "pagar_cita"
+                        # Se usa una while para validar la variable "pagar_ahora"
                         while True:
                             # Se solicita al usuario ingresar una opción
-                            pagar_cita = input("\n¿Pagar Ahora? Sí(S) No(N): ").strip().upper()
+                            pagar_ahora = input("\n¿Pagar Ahora? Sí(S) No(N): ").strip().upper()
 
-                            # Si el valor de la variable "pagar_cita" es "S" ó "N"
-                            if pagar_cita == 'S' or pagar_cita == 'N':
-                                # Se sale del while que valida la variable "pagar_cita"
+                            # Si el valor de la variable "pagar_ahora" es "S" ó "N"
+                            if pagar_ahora == 'S' or pagar_ahora == 'N':
+                                # Se sale del while que valida la variable "pagar_ahora"
                                 break
                             
-                            # Si el valor de la variable "pagar_cita" es diferente a "S" y "N"
+                            # Si el valor de la variable "pagar_ahora" es diferente a "S" y "N"
                             else:
                                 # Se imprime el mensaje de error correspondiente
                                 print("Opción inválida ❌")
                                 # Se evalua la cantidad de errores
                                 if validar_errores(): return
-                                # Se continua con la siguiente iteración del while que valida la variable "pagar_cita"
+                                # Se continua con la siguiente iteración del while que valida la variable "pagar_ahora"
                                 continue
                         
-                        # Se evalua el valor de la variable "pagar_cita"
-                        match pagar_cita:
+                        # Se evalua el valor de la variable "pagar_ahora"
+                        match pagar_ahora:
                             # Si el valor es 'S'
                             case 'S':
                                 # Se ejecuta la función "pagar_cita" y el resultado se guarda en la variable "estado_cita"
-                                estado_cita = pagar_cita(cita_seleccionada)
+                                estado_cita = pagar_cita(cita_seleccionada = cita_seleccionada)
                                 # Si el pago fue exitoso
                                 if estado_cita == "Pagado":
                                     # Se limpia la pantalla
@@ -1815,6 +1850,9 @@ def registrar_atencion(correo):
             # Se obtiene la mascota en base a su ID
             mascota = next(m for m in tabla_mascotas if m.id == id_mascota)
 
+            # Se limpia la pantalla
+            limpiar_pantalla()
+
             # Se muestra el resumen de la atención
             print("####RESUMEN DE ATENCIÓN###")
             print(f"\nID-Atencion: {id_nueva_atencion}")
@@ -1873,6 +1911,9 @@ def registrar_atencion(correo):
         # Se actualiza el número de atenciones en el diccionario "atencion_id"
         atencion_id["ATN"] = num_nueva_atencion
 
+        # Se indica que la cita seleccionada ha sido atendida
+        cita_seleccionada.atendido = True
+
         # Se imprime mensaje de confirmación
         print(f"\n¡Atención registrada con éxito! ✅ (ID: {atencion_nueva.id_atencion})")
 
@@ -1887,6 +1928,8 @@ def registrar_atencion(correo):
 
                 # Si el valor ingresado es "S", 
                 case "S":
+                    # Se limpia la pantalla
+                    limpiar_pantalla()
                     # La cantidad de errores se restablece a 0
                     errores = 0
                     # Se sale del while de validación de la variable "nuevo_registro" y se vuelve a repetir el proceso (while para volver a registrar otra atención)
@@ -1905,7 +1948,7 @@ def registrar_atencion(correo):
 
                     # Se espera que el usuario presione cualquier tecla para continuar
                     input("\nPresione cualquier tecla para continuar...")
-                    
+
                     # Se sale de la función registrar_atencion y se retorna el menú del sistema
                     return
 
@@ -1922,7 +1965,7 @@ def registrar_atencion(correo):
 ####2.5.FUNCION PAGAR CITA####
 
 #####FUNCION PAGAR CITA######
-def pagar_cita(correo_usuario, cita_seleccionada = None):
+def pagar_cita(correo_usuario = None, cita_seleccionada = None):
 
     errores = 0
 
@@ -1938,7 +1981,7 @@ def pagar_cita(correo_usuario, cita_seleccionada = None):
     
     while True:
 
-        if correo_usuario != None and cita_seleccionada == None:
+        if correo_usuario != None:
             limpiar_pantalla()
             print("===== PAGAR CITA =====\n")
 
@@ -2066,10 +2109,11 @@ def pagar_cita(correo_usuario, cita_seleccionada = None):
 
         else:
             print("\nEl pago no pudo completarse ❌")
+            estado_cita = "Pendiente"
 
         input("\nPresione Enter para continuar...")
 
-        if correo_usuario == None and cita_seleccionada != None:
+        if correo_usuario == None:
             return estado_cita
 
         #============================
@@ -2086,6 +2130,7 @@ def pagar_cita(correo_usuario, cita_seleccionada = None):
                 case _:
                     print("Opción inválida ❌")
                     if validar_errores(): return
+                    continue
 ##################################################
 
 ####FUNCION PAGAR CON TARJETA ####
@@ -2255,109 +2300,3 @@ menu_inicial()
 # ╔══════════════════════════════════════════════════════════╗
 # ║          FIN DEL PROGRAMA                                ║
 # ╚══════════════════════════════════════════════════════════╝
-          
-
-
-
-
-
- 
-
-        
-      
-
-
-
-
-
-
-
-
-
-               
-
-         
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-               
-
-
-    
-
-        
-
-
-      
-
-        
-
-       
-
-     
-
-
-
-
-
-                 
-         
-
-
-
-
-                
-
-
-
-
-
-
-
-
-         
-
-     
-       
-
-
-    
-            
-    
-     
-
-     
-         
-
-    
-        
-
-
-
-    
-
-
-    
-
-
-
-
-
-
-
-
-                    
